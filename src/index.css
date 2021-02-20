@@ -1,13 +1,199 @@
-body {
+* {
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+}
+input {
+  border: none;
+}
+input :focus {
+  background-color: black;
+  color: white;
+  outline: none;
+}
+.full-screen {
+  height: 100vh;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.btn {
+  color: white;
+  border-radius: 5px;
+  margin: 0 3%;
+  padding: 5px 20px;
+  border: none;
+  box-shadow: 3px 3px black;
+}
+.btn:hover {
+  cursor: pointer;
+}
+.btn-black {
+  background-color: black;
+}
+.btn-black:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.btn-red {
+  background-color: red;
+}
+.btn-red-:hover {
+  background-color: rgba(255, 0, 0, 0.7);
+}
+.btn-green {
+  background-color: green;
+}
+.btn-green:hover {
+  background-color: rgba(0, 255, 0, 0.7);
+}
+.btn-blue {
+  background-color: blue;
+}
+.btn-blue:hover {
+  background-color: rgba(0, 0, 255, 0.7);
+}
+
+.text-14px {
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: normal;
+}
+.text-16px {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: normal;
+}
+.text-18px {
+  font-size: 18px;
+  line-height: 27px;
+  font-weight: normal;
+}
+.text-20px {
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: normal;
+}
+.text-24px {
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: normal;
+}
+.text-30px {
+  font-size: 30px;
+  line-height: 45px;
+  font-weight: normal;
+}
+.text-55px {
+  font-size: 55px;
+  line-height: 64px;
+  font-weight: normal;
+}
+.text-medium {
+  font-weight: 500;
+}
+.text-bold {
+  font-weight: bold;
+}
+.text-uppercase {
+  text-transform: uppercase;
+}
+.text-lowercase {
+  text-transform: lowercase;
+}
+.text-center {
+  text-align: center;
+}
+.disp-none {
+  display: none;
+}
+.disp-block {
+  display: block;
+}
+.disp-flex {
+  display: flex;
+}
+.flex-direct-col {
+  flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.just-center {
+  justify-content: center;
+}
+.just-start {
+  justify-content: flex-start;
+}
+.just-end {
+  justify-content: flex-end;
+}
+.just-sp-evenly {
+  justify-content: space-evenly;
+}
+.just-sp-between {
+  justify-content: space-between;
+}
+.align-center {
+  align-items: center;
+}
+.align-start {
+  align-items: flex-start;
+}
+.wid-100 {
+  width: 100%;
+}
+.wid-90 {
+  width: 90%;
+}
+.wid-80 {
+  width: 80%;
+}
+.wid-70 {
+  width: 70%;
+}
+.wid-60 {
+  width: 60%;
+}
+.wid-50 {
+  width: 50%;
+}
+.wid-45 {
+  width: 45%;
+}
+.wid-40 {
+  width: 40%;
+}
+.wid-30 {
+  width: 30%;
+}
+.wid-20 {
+  width: 20%;
+}
+.wid-10 {
+  width: 10%;
+}
+.hei-30 {
+  height: 30%;
+}
+.mg-0 {
+  margin: 0;
+}
+.mg-t-15 {
+  margin-top: 15%;
+}
+.mg-t-10 {
+  margin-top: 10%;
+}
+.mg-t-5 {
+  margin-top: 5%;
+}
+.mg-t-2 {
+  margin-top: 2%;
+}
+.mg-b-5 {
+  margin-bottom: 5%;
+}
+.mg-b-2 {
+  margin-bottom: 2%;
+}
+.text-decore-none {
+  text-decoration: none;
 }

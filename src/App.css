@@ -1,38 +1,82 @@
-.App {
-  text-align: center;
+.bdtt {
+  border: solid teal 0.5px;
+  background-color: aqua;
+  background-color: chartreuse;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.background-image {
+  background-position: center;
+  background-repeat: space;
+  background-size: cover;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.login form {
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
+  width: 30%;
+  min-width: 300px;
+  height: 35%;
+  min-height: 200px;
+}
+.login form label {
+  margin-top: 2%;
+  margin-bottom: 1%;
+}
+.login form button {
+  margin: auto 0;
 }
 
-.App-link {
-  color: #61dafb;
+.campeonato {
+  padding: 2%;
+  padding-top: 4%;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.campeonato input {
+  margin-left: 2%;
+}
+.campeonato textarea {
+  height: 100px;
+}
+.search {
+  height: 20px;
+  border: 2px solid black;
+  border-radius: 5px;
+  margin: 2% 0;
+}
+.search img {
+  height: 15px;
+  margin-left: 2%;
+}
+.search input {
+  height: 20px;
+  width: 95%;
+  border-radius: 5px;
+}
+.search input:focus {
+  outline: none;
+}
+.date-championships {
+  border: 2px solid black;
+  border-radius: 5px;
+}
+.championship-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding-top: 2%;
+}
+.championship-card .link {
+  width: 150px;
+  margin: 2% 1%;
+  text-align: center;
+  text-decoration: none;
+}
+.championship-card div {
+  border: 2px solid black;
+  height: 100px;
+  margin-bottom: 2%;
+}
+.championship-card h5 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: ltr;
 }
