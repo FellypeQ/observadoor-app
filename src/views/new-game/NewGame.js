@@ -163,6 +163,19 @@ function NewGame(props) {
     }
   };
 
+  const handleDelete = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_BASE}game/${idGame}`
+      );
+      history.push(`/campeonatos/detalhes/${idChampionship}/jogos`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="campeonato ">
       <ChampionshipInfo
@@ -209,6 +222,9 @@ function NewGame(props) {
         >
           Cancelar
         </Link>
+        <button className="btn btn-red text-14px mg-b-5" onClick={handleDelete}>
+          Excluir jogo
+        </button>
       </section>
     </div>
   );

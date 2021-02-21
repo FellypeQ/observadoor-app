@@ -81,7 +81,7 @@ function Games(props) {
           <Game
             key={idx}
             gameName={game.gameName}
-            dateGame={game.dateGame}
+            dateGame={game.dateGame.replace("Z", "")}
             category={game.category}
             teamA={game.teamA}
             teamB={game.teamB}

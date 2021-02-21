@@ -1,20 +1,46 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 
 import Inputs from "../../components/Inputs";
 import Game from "../../components/Game";
+import axios from "axios";
 
 function Athletic(props) {
+  const idChampionship = props.match.params.id;
+  const idGame = props.match.params.gameId;
   const nomeObsevador = localStorage.login;
-  const [championship, setChampionship] = useState({
-    name: "Copa Favela",
-  });
+  const [championship, setChampionship] = useState("");
   const [game, setGame] = useState({
-    gameName: "Jogo 1",
-    dateGame: "2019-06-25T12:09",
-    category: "Categoria sub-12",
-    teamA: "Pau da Lima",
-    teamB: "PAFF",
+    gameName: "",
+    dateGame: "",
+    category: "",
+    teamA: "",
+    teamB: "",
   });
+
+  useEffect(async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
+      );
+      setChampionship(response.data.name);
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE}game/${idGame}`
+      );
+      setGame({
+        gameName: response.data.gameName,
+        dateGame: response.data.dateGame.replace("Z", ""),
+        category: response.data.category,
+        teamA: response.data.teamA,
+        teamB: response.data.teamB,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   const [athlete, seAthlete] = useState({
     name: "Jean",
@@ -39,7 +65,7 @@ function Athletic(props) {
         className="text-30px wid-90 disp-flex just-center mg-b-2"
         placeholder="Nome do Campeonato "
         name="name"
-        value={championship.name}
+        value={championship}
         onChange={handleChange}
         disabled="disabled"
       />
