@@ -19,9 +19,10 @@ function NewGame(props) {
     details: "",
   });
   const [game, setGame] = useState({
+    _id: "",
     idChampionship: "",
     gameName: "",
-    dateGame: "", //"2019-06-25T12:09",
+    dateGame: "",
     category: "",
     teamA: "",
     teamB: "",
@@ -50,15 +51,17 @@ function NewGame(props) {
     } catch (error) {
       console.error(error);
     }
+
     if (idGame) {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE}game/${idGame}`
         );
         setGame({
+          _id: response.data._id,
           idChampionship: response.data.idChampionship,
           gameName: response.data.gameName,
-          dateGame: response.data.dateGame,
+          dateGame: response.data.dateGame.replace("Z", ""),
           category: response.data.category,
           teamA: response.data.teamA,
           teamB: response.data.teamB,
@@ -67,7 +70,7 @@ function NewGame(props) {
         console.log(error);
       }
     }
-  }, [props]);
+  }, []);
 
   const handleChange = (event) => {
     setGame({
@@ -76,9 +79,88 @@ function NewGame(props) {
     });
   };
 
-  const handleLikeAthletic = (event) => {
+  const handleSave = async (event) => {
     event.preventDefault();
-    history.push("/campeonatos/detalhes/aaaaaaaaa/jogos/sssssssss/novo-atleta");
+
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_BASE}game/${game._id}`,
+        game
+      );
+      history.push(`/campeonatos/detalhes/${idChampionship}/jogos`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleLikeAthletic = async (event) => {
+    event.preventDefault();
+
+    if (idGame) {
+      try {
+        const response = await axios.patch(
+          `${process.env.REACT_APP_API_BASE}game/${game._id}`,
+          game
+        );
+        history.push(
+          `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/novo-atleta`
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      const { _id, ...NewGame } = game;
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE}game`,
+        NewGame
+      );
+      history.push(
+        `/campeonatos/detalhes/${idChampionship}/jogos/${response.data.result._id}/novo-atleta`
+      );
+    }
+  };
+
+  const handleOtherAthletic = async (event) => {
+    event.preventDefault();
+
+    if (idGame) {
+      try {
+        const response = await axios.patch(
+          `${process.env.REACT_APP_API_BASE}game/${game._id}`,
+          game
+        );
+        history.push(`/campeonatos/detalhes/${idChampionship}/jogos/novo`);
+        setGame({
+          _id: "",
+          idChampionship: "",
+          gameName: "",
+          dateGame: "",
+          category: "",
+          teamA: "",
+          teamB: "",
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      const { _id, ...NewGame } = game;
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE}game`,
+        NewGame
+      );
+      history.push(`/campeonatos/detalhes/${idChampionship}/jogos/novo`);
+      setGame({
+        _id: "",
+        idChampionship: "",
+        gameName: "",
+        dateGame: "",
+        category: "",
+        teamA: "",
+        teamB: "",
+      });
+    }
   };
 
   return (
@@ -101,18 +183,24 @@ function NewGame(props) {
           teamA={game.teamA}
           teamB={game.teamB}
           handleChange={handleChange}
+          idGame={game._id}
           handleLikeAthletic={handleLikeAthletic}
         />
       </section>
       <section className="mg-t-5 disp-flex flex-wrap align-center just-sp-evenly">
-        <button className="btn btn-black text-14px mg-b-5">Salvar</button>
+        <button className="btn btn-black text-14px mg-b-5" onClick={handleSave}>
+          Salvar
+        </button>
         <Link
           to={`/campeonatos/detalhes/${idChampionship}/jogos`}
           className="btn btn-blue text-14px mg-b-5 text-decore-none"
         >
           Jogos Realizados
         </Link>
-        <button className="btn btn-green text-14px mg-b-5">
+        <button
+          className="btn btn-green text-14px mg-b-5"
+          onClick={handleOtherAthletic}
+        >
           Adicionar outro Jogo
         </button>
         <Link
