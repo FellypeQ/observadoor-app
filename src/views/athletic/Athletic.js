@@ -16,6 +16,24 @@ function Athletic(props) {
     teamA: "",
     teamB: "",
   });
+  const [athlete, seAthlete] = useState({
+    idGame: "",
+    name: "",
+    year: "",
+    birthDate: "",
+    team: "",
+    shirtNumber: "",
+    skillLeg: "",
+    shortPass: "",
+    longPass: "",
+    header: "",
+    position: "",
+    velocity: "",
+    reactionPower: "",
+    mobility: "",
+    finalization: "",
+    comentary: "",
+  });
 
   useEffect(async () => {
     try {
@@ -42,22 +60,13 @@ function Athletic(props) {
     }
   }, []);
 
-  const [athlete, seAthlete] = useState({
-    name: "Jean",
-    year: 2005,
-    birthDate: "",
-    team: "Pau da Lima",
-    shirtNumber: 9,
-    skillLeg: { left: false, right: true },
-  });
-
   const handleChange = (event) => {
     seAthlete({
       ...athlete,
       [event.target.name]: event.target.value,
     });
   };
-  //
+
   return (
     <div>
       <Inputs
@@ -82,7 +91,11 @@ function Athletic(props) {
         noButton={true}
       />
       <form className="disp-flex flex-direct-col">
-        <h5>Novo Atleta</h5>
+        <h5>
+          {props.location.pathname.includes("novo")
+            ? "Novo Atleta"
+            : "Editar Atleta"}
+        </h5>
         <Inputs label="Foto atleta" type="file" className="disp-block" />
         <Inputs
           label="Nome: "
@@ -103,7 +116,7 @@ function Athletic(props) {
           label="Data de nascimento: "
           type="date"
           name="birthDate"
-          value={athlete.birthDate}
+          value={athlete.birthDate.split("T")[0]}
           onChange={handleChange}
         />
         <Inputs
@@ -121,13 +134,104 @@ function Athletic(props) {
           onChange={handleChange}
         />
         <Inputs
+          format="radio"
           label="Perna de maior habilidade: "
           type="radio"
           name="skillLeg"
           value={athlete.skillLeg}
           onChange={handleChange}
+          options={["Esquerda", "Direita"]}
+        />
+        <h4>Fundamentos</h4>
+        <Inputs
+          format="radio"
+          label="Passe curto: "
+          type="radio"
+          name="shortPass"
+          value={athlete.shortPass}
+          onChange={handleChange}
+          options={["ruim", "normal", "bom", "acima da média"]}
+        />
+        <Inputs
+          format="radio"
+          label="Passe longo: "
+          type="radio"
+          name="longPass"
+          value={athlete.longPass}
+          onChange={handleChange}
+          options={["ruim", "normal", "bom", "acima da média"]}
+        />
+        <Inputs
+          format="radio"
+          label="Cabeceio: "
+          type="radio"
+          name="header"
+          value={athlete.header}
+          onChange={handleChange}
+          options={["ruim", "normal", "bom", "acima da média"]}
+        />
+        <Inputs
+          format="radio"
+          label="Posicionamento: "
+          type="radio"
+          name="position"
+          value={athlete.position}
+          onChange={handleChange}
+          options={["ruim", "normal", "bom", "acima da média"]}
+        />
+        <Inputs
+          format="radio"
+          label="Velocidade: "
+          type="radio"
+          name="velocity"
+          value={athlete.velocity}
+          onChange={handleChange}
+          options={["ruim", "normal", "bom", "acima da média"]}
+        />
+        <Inputs
+          format="radio"
+          label="Poder de reação: "
+          type="radio"
+          name="reactionPower"
+          value={athlete.reactionPower}
+          onChange={handleChange}
+          options={["ruim", "normal", "bom", "acima da média"]}
+        />
+        <Inputs
+          format="radio"
+          label="Mobilidade: "
+          type="radio"
+          name="mobility"
+          value={athlete.mobility}
+          onChange={handleChange}
+          options={["ruim", "normal", "bom", "acima da média"]}
+        />
+        <Inputs
+          format="radio"
+          label="Mobilidade: "
+          type="radio"
+          name="finalization"
+          value={athlete.finalization}
+          onChange={handleChange}
+          options={["ruim", "normal", "bom", "acima da média"]}
+        />
+        <Inputs
+          format="textarea"
+          label="Adicionar comentário: "
+          placeholder="Digite seu comentário"
+          className=""
+          name="comentary"
+          value={athlete.comentary}
+          onChange={handleChange}
         />
       </form>
+      <div className="disp-flex just-sp-evenly align-center flex-wrap">
+        <button className="btn btn-green mg-y-2 ">Salvar</button>
+        <button className="btn btn-black mg-y-2 ">
+          Adicionar mais informações
+        </button>
+        <button className="btn btn-red mg-y-2 ">Excluir</button>
+      </div>
     </div>
   );
 }

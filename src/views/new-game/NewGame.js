@@ -188,7 +188,11 @@ function NewGame(props) {
         disabled={"disabled"}
       />
       <section>
-        <h3 className="mg-b-2">Novo Jogo</h3>
+        <h3 className="mg-b-2">
+          {props.location.pathname.includes("novo")
+            ? "Novo Jogo"
+            : "Editar Jogo"}
+        </h3>
         <Game
           gameName={game.gameName}
           dateGame={game.dateGame}

@@ -76,7 +76,7 @@ function Games(props) {
         disabled={"disabled"}
       />
       <section>
-        <h3 className="mg-b-2">Novo Jogo</h3>
+        <h3 className="mg-b-2">Jogos Realizados</h3>
         {games.map((game, idx) => (
           <Game
             key={idx}
