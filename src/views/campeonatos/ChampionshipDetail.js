@@ -64,7 +64,6 @@ function ChampionshipDetail(props) {
       }
     } else {
       const newChampionship = { ...championship, userID: userID };
-      console.log(newChampionship);
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_API_BASE}championship`,

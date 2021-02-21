@@ -57,7 +57,13 @@ function Campeonatos(props) {
           <button className="btn btn-black">Novo torneio </button>
         </Link>
       </section>
-      <CardCampeonato list={championships.filterList} />
+      {championships.filterList.map((championship, idx) => (
+        <CardCampeonato
+          key={idx}
+          idChampionship={championship._id}
+          name={championship.name}
+        />
+      ))}
     </div>
   );
 }
