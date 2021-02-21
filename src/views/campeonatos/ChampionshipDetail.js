@@ -1,40 +1,45 @@
 import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 
 function ChampionshipDetail(props) {
+  const userID = "602dbe9df1f9663f20cb33aa";
+
   const nomeObsevador = localStorage.login;
   const [championship, setChampionship] = useState({
     name: "",
     localization: "",
     competionDate: "",
     category: "",
-    responsible: "",
+    responsable: "",
     details: "",
+    userID: "",
   });
   const history = useHistory();
+  const idChampionship = props.match.params.id;
 
-  useEffect(() => {
-    if (props.match.params.id) {
-      const tempback = JSON.parse(localStorage.getItem("dbchampionship"));
-      setChampionship({
-        name: tempback.name,
-        localization: tempback.localization,
-        competionDate: tempback.competionDate,
-        category: tempback.category,
-        responsible: tempback.responsible,
-        details: tempback.details,
-      });
-    } else {
-      setChampionship({
-        name: "",
-        localization: "",
-        competionDate: "",
-        category: "",
-        responsible: "",
-        details: "",
-      });
+  useEffect(async () => {
+    if (idChampionship) {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
+        );
+        setChampionship({
+          name: response.data.name,
+          localization: response.data.localization,
+          competionDate: response.data.competionDate
+            ? response.data.competionDate.split("T")[0]
+            : "",
+          category: response.data.category,
+          responsable: response.data.responsable,
+          details: response.data.details,
+          userID: response.data.userID,
+        });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }, [props]);
 
@@ -44,12 +49,73 @@ function ChampionshipDetail(props) {
       [event.target.name]: event.target.value,
     });
   };
-  const handleAddGame = (event) => {
+  const handleSaveChampionship = async (event) => {
     event.preventDefault();
-    if (props.match.params.id) {
-      history.push(`/campeonatos/detalhes/${props.match.params.id}/jogos/novo`);
+
+    if (idChampionship) {
+      try {
+        const response = await axios.patch(
+          `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`,
+          championship
+        );
+        history.push("/campeonatos");
+      } catch (err) {
+        console.error(err);
+      }
     } else {
-      history.push("/campeonatos/detalhes/bbbbbbbbb/jogos/novo"); //'bbbbbbbbb' é o _id do retorno de salvar no banco
+      const newChampionship = { ...championship, userID: userID };
+      console.log(newChampionship);
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_BASE}championship`,
+          newChampionship
+        );
+        history.push("/campeonatos");
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  const handleAddGame = async (event) => {
+    event.preventDefault();
+
+    if (idChampionship) {
+      try {
+        const response = await axios.patch(
+          `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`,
+          championship
+        );
+        history.push(`/campeonatos/detalhes/${idChampionship}/jogos/novo`);
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      const newChampionship = { ...championship, userID: userID };
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_BASE}championship`,
+          newChampionship
+        );
+        history.push(
+          `/campeonatos/detalhes/${response.data.result._id}/jogos/novo`
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  const handleDelete = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
+      );
+      history.push("/campeonatos");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -62,7 +128,7 @@ function ChampionshipDetail(props) {
         localization={championship.localization}
         competionDate={championship.competionDate}
         category={championship.category}
-        responsible={championship.responsible}
+        responsable={championship.responsable}
       />
       <label className="wid-100 text-18px">Detalhes da competição</label>
       <textarea
@@ -73,8 +139,8 @@ function ChampionshipDetail(props) {
         value={championship.details}
         onChange={handleChange}
       />
-      {props.match.params.id ? (
-        <sectionbtnjogo className="disp-flex just-sp-evenly flex-wrap align-center">
+      {idChampionship ? (
+        <div className="disp-flex just-sp-evenly flex-wrap align-center">
           <button
             className="btn btn-green text-14px mg-b-5"
             onClick={handleAddGame}
@@ -82,7 +148,7 @@ function ChampionshipDetail(props) {
             Adicionar Jogo
           </button>
           <Link
-            to={`/campeonatos/detalhes/${props.match.params.id}/jogos`}
+            to={`/campeonatos/detalhes/${idChampionship}/jogos`}
             className="btn btn-blue text-14px mg-b-5 text-decore-none"
           >
             Jogos Realizados
@@ -93,13 +159,27 @@ function ChampionshipDetail(props) {
           >
             Voltar
           </Link>
-          <button className="btn btn-black text-14px mg-b-5">
+          <button
+            className="btn btn-black text-14px mg-b-5"
+            onClick={handleSaveChampionship}
+          >
             Salvar Edição
           </button>
-        </sectionbtnjogo>
+          <button
+            className="btn btn-red text-14px mg-b-5"
+            onClick={handleDelete}
+          >
+            Excluir campeonato
+          </button>
+        </div>
       ) : (
-        <sectionbtnjogo className="disp-flex flex-wrap align-center just-sp-evenly">
-          <button className="btn btn-black text-16px mg-b-5">Salvar</button>
+        <div className="disp-flex flex-wrap align-center just-sp-evenly">
+          <button
+            className="btn btn-black text-16px mg-b-5"
+            onClick={handleSaveChampionship}
+          >
+            Salvar
+          </button>
           <button
             className="btn btn-green text-14px mg-b-5"
             onClick={handleAddGame}
@@ -112,7 +192,7 @@ function ChampionshipDetail(props) {
           >
             Voltar
           </Link>
-        </sectionbtnjogo>
+        </div>
       )}
     </form>
   );

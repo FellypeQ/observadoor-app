@@ -1,3 +1,4 @@
+import axios from "axios";
 import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
@@ -5,63 +6,62 @@ import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
 
 function Games(props) {
-  console.log(props);
+  const idChampionship = props.match.params.id;
+
   const nomeObsevador = localStorage.login;
   const [championship, setChampionship] = useState({
     name: "",
     localization: "",
     competionDate: "",
     category: "",
-    responsible: "",
+    responsable: "",
     details: "",
   });
-  const [games, setGames] = useState([
-    {
-      gameName: "Jogo 1",
-      dateGame: "2019-06-25T10:00",
-      category: "Categoria sub-12",
-      teamA: "Pau da Lima",
-      teamB: "PAFF",
-    },
-    {
-      gameName: "Jogo 3",
-      dateGame: "2019-08-13T12:09",
-      category: "Categoria sub-15",
-      teamA: "Clemente",
-      teamB: "Bahia",
-    },
-    {
-      gameName: "Jogo 1",
-      dateGame: "2019-09-05T16:00",
-      category: "Categoria sub-12",
-      teamA: "Porto",
-      teamB: "Vitória",
-    },
-  ]);
+  const [games, setGames] = useState([]);
   const history = useHistory();
 
-  useEffect(() => {
-    const tempback = JSON.parse(localStorage.getItem("dbchampionship"));
-    setChampionship({
-      name: tempback.name,
-      localization: tempback.localization,
-      competionDate: tempback.competionDate,
-      category: tempback.category,
-      responsible: tempback.responsible,
-      details: tempback.details,
-    });
+  useEffect(async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
+      );
+      setChampionship({
+        name: response.data.name,
+        localization: response.data.localization,
+        competionDate: response.data.competionDate
+          ? response.data.competionDate.split("T")[0]
+          : "",
+        category: response.data.category,
+        responsable: response.data.responsable,
+        details: response.data.details,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE}games/${idChampionship}`
+      );
+      setGames(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   }, [props]);
 
-  const handleChange = (event) => {
-    setChampionship({
-      ...championship,
-      [event.target.name]: event.target.value,
-    });
+  const handleEdition = (event) => {
+    event.preventDefault();
+    const idGame = event.target.name;
+
+    history.push(`/campeonatos/detalhes/${idChampionship}/jogos/${idGame}`);
   };
 
   const handleLikeAthletic = (event) => {
     event.preventDefault();
-    history.push("/campeonatos/detalhes/aaaaaaaaa/jogos/sssssssss/novo-atleta");
+    const idGame = event.target.name;
+
+    history.push(
+      `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/novo-atleta`
+    );
   };
 
   return (
@@ -69,11 +69,10 @@ function Games(props) {
       <ChampionshipInfo
         name={championship.name}
         nomeObsevador={nomeObsevador}
-        handleChange={handleChange}
         localization={championship.localization}
         competionDate={championship.competionDate}
         category={championship.category}
-        responsible={championship.responsible}
+        responsable={championship.responsable}
         disabled={"disabled"}
       />
       <section>
@@ -86,15 +85,17 @@ function Games(props) {
             category={game.category}
             teamA={game.teamA}
             teamB={game.teamB}
-            handleChange={handleChange}
             disabled={"disabled"}
             handleLikeAthletic={handleLikeAthletic}
+            edition={true}
+            idGame={game._id}
+            handleEdition={handleEdition}
           />
         ))}
       </section>
       <sectionbtnjogo className="mg-t-5 disp-flex flex-wrap align-center just-sp-evenly">
         <Link
-          to={`/campeonatos/detalhes/${props.match.params.id}/jogos/novo`}
+          to={`/campeonatos/detalhes/${idChampionship}/jogos/novo`}
           className="btn btn-green text-14px mg-b-5 text-decore-none"
         >
           Adicionar outro Jogo

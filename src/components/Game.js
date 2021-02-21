@@ -2,7 +2,7 @@ import { React } from "react";
 
 function Game(props) {
   return (
-    <form>
+    <form className="game">
       <section className="mg-b-2">
         <label>Jogo: </label>
         <input
@@ -49,7 +49,7 @@ function Game(props) {
           <option>Categoria sub-11</option>
           <option>Categoria sub-10</option>
         </select>
-        <sectionteans className="disp-flex just-sp-between">
+        <section className="disp-flex just-sp-between">
           <input
             type="text"
             placeholder="Equipe A"
@@ -71,12 +71,24 @@ function Game(props) {
             onChange={props.handleChange}
             disabled={props.disabled}
           />
-        </sectionteans>
+        </section>
+        {props.edition ? (
+          <button
+            className="btn btn-blue mg-t-2"
+            name={props.idGame}
+            onClick={props.handleEdition}
+          >
+            Editar a partida
+          </button>
+        ) : (
+          <></>
+        )}
         {props.noButton ? (
           <></>
         ) : (
           <button
             className="btn btn-black mg-t-2"
+            name={props.idGame}
             onClick={props.handleLikeAthletic}
           >
             Gostei do atleta

@@ -80,3 +80,16 @@
   text-overflow: ellipsis;
   direction: ltr;
 }
+
+.game {
+  border: dotted 1px #a6acb1;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: rgba(150, 150, 150, 0.7) 10px 10px 15px;
+  margin: 3% 1%;
+  padding: 2%;
+}
+.game input:disabled,
+* {
+  background-color: #ffffff;
+}

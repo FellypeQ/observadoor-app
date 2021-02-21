@@ -54,8 +54,8 @@ function ChampionshipInfo(props) {
             className="wid-60"
             type="text"
             placeholder="Responsável pelo campeonato"
-            name="responsible"
-            value={props.responsible}
+            name="responsable"
+            value={props.responsable}
             onChange={props.handleChange}
             disabled={props.disabled}
           />

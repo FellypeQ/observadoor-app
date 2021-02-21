@@ -42,7 +42,11 @@ function App() {
           component={NewGame}
         />
 
-        <Route exact path="/campeonatos/detalhes/:id/jogos/:gameId" />
+        <Route
+          exact
+          path="/campeonatos/detalhes/:id/jogos/:gameId"
+          component={NewGame}
+        />
 
         <Route
           exact
