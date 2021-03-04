@@ -29,7 +29,7 @@ function Login(props) {
         onSubmit={handleSubmit}
       >
         <label className="text-24px text-center">
-          Bem vindo ao Observadoor
+          Bem vindo ao Observadoor!
         </label>
         <label>E-mail</label>
         <input
