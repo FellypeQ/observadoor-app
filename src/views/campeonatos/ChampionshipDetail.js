@@ -7,7 +7,7 @@ import ChampionshipInfo from "../../components/ChampionshipInfo";
 function ChampionshipDetail(props) {
   const userID = "602dbe9df1f9663f20cb33aa";
 
-  const nomeObsevador = localStorage.login;
+  const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
   const [championship, setChampionship] = useState({
     name: "",
     localization: "",
@@ -122,7 +122,7 @@ function ChampionshipDetail(props) {
     <form className="campeonato ">
       <ChampionshipInfo
         name={championship.name}
-        nomeObsevador={nomeObsevador}
+        nomeObsevador={nomeObsevador.user.name}
         handleChange={handleChange}
         localization={championship.localization}
         competionDate={championship.competionDate}

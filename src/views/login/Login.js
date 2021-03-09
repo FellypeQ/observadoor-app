@@ -1,8 +1,11 @@
-import { React, useState } from "react";
+import { React, useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { AuthContext } from "../../autenntication/authContext";
+import api from "../../autenntication/api";
 
 function Login(props) {
   const [formLogin, setFormLogin] = useState({ email: "", senha: "" });
+  const authContext = useContext(AuthContext);
 
   const history = useHistory();
 
@@ -12,11 +15,24 @@ function Login(props) {
     setFormLogin({ ...formLogin, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    //localStorage.clear();
-    localStorage.setItem("login", formLogin.email.split("@")[0]);
-    history.push("/campeonatos");
+
+    try {
+      const response = await api.post(
+        `${process.env.REACT_APP_API_BASE}usuario/login`,
+        formLogin
+      );
+      authContext.setLoggedInUser({ ...response.data });
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify({ ...response.data })
+      );
+      history.push("/campeonatos");
+      window.location.reload(true);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

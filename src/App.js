@@ -3,6 +3,9 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import "./App.css";
 
+import { AuthContextComponent } from "./autenntication/authContext";
+import PrivateRoute from "./autenntication/PrivateRoute";
+
 import Login from "./views/login/Login";
 import Campeonatos from "./views/campeonatos/Campeonatos";
 import ChampionshipDetail from "./views/campeonatos/ChampionshipDetail";
@@ -25,40 +28,50 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={Login} />
-        <Route exact path="/campeonatos" component={Campeonatos} />
-        <Route exact path="/campeonatos/novo" component={ChampionshipDetail} />
-        <Redirect exact from="/campeonatos/detalhes" to="/campeonatos" />
-        <Route
-          exact
-          path="/campeonatos/detalhes/:id"
-          component={ChampionshipDetail}
-        />
-        <Route exact path="/campeonatos/detalhes/:id/jogos" component={Games} />
-        <Route
-          exact
-          path="/campeonatos/detalhes/:id/jogos/novo"
-          component={NewGame}
-        />
+      <AuthContextComponent>
+        <Switch>
+          <Route exact path="/" component={Login} />
+          <PrivateRoute exact path="/campeonatos" component={Campeonatos} />
+          <PrivateRoute
+            exact
+            path="/campeonatos/novo"
+            component={ChampionshipDetail}
+          />
+          <Redirect exact from="/campeonatos/detalhes" to="/campeonatos" />
+          <PrivateRoute
+            exact
+            path="/campeonatos/detalhes/:id"
+            component={ChampionshipDetail}
+          />
+          <PrivateRoute
+            exact
+            path="/campeonatos/detalhes/:id/jogos"
+            component={Games}
+          />
+          <PrivateRoute
+            exact
+            path="/campeonatos/detalhes/:id/jogos/novo"
+            component={NewGame}
+          />
 
-        <Route
-          exact
-          path="/campeonatos/detalhes/:id/jogos/:gameId"
-          component={NewGame}
-        />
+          <PrivateRoute
+            exact
+            path="/campeonatos/detalhes/:id/jogos/:gameId"
+            component={NewGame}
+          />
 
-        <Route
-          exact
-          path="/campeonatos/detalhes/:id/jogos/:gameId/novo-atleta"
-          component={Athletic}
-        />
-        <Route
-          exact
-          path="/campeonatos/detalhes/:id/jogos/:gameId/:athleteId"
-          component={Athletic}
-        />
-      </Switch>
+          <PrivateRoute
+            exact
+            path="/campeonatos/detalhes/:id/jogos/:gameId/novo-atleta"
+            component={Athletic}
+          />
+          <PrivateRoute
+            exact
+            path="/campeonatos/detalhes/:id/jogos/:gameId/:athleteId"
+            component={Athletic}
+          />
+        </Switch>
+      </AuthContextComponent>
     </BrowserRouter>
   );
 }

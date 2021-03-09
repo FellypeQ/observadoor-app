@@ -8,7 +8,7 @@ import Game from "../../components/Game";
 function Games(props) {
   const idChampionship = props.match.params.id;
 
-  const nomeObsevador = localStorage.login;
+  const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
   const [championship, setChampionship] = useState({
     name: "",
     localization: "",
@@ -68,7 +68,7 @@ function Games(props) {
     <div>
       <ChampionshipInfo
         name={championship.name}
-        nomeObsevador={nomeObsevador}
+        nomeObsevador={nomeObsevador.user.name}
         localization={championship.localization}
         competionDate={championship.competionDate}
         category={championship.category}
@@ -81,7 +81,7 @@ function Games(props) {
           <Game
             key={idx}
             gameName={game.gameName}
-            dateGame={game.dateGame.replace("Z", "")}
+            dateGame={game.dateGame ? game.dateGame.replace("Z", "") : ""}
             category={game.category}
             teamA={game.teamA}
             teamB={game.teamB}
