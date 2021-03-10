@@ -1,6 +1,7 @@
-import axios from "axios";
 import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
+import api from "../../autenntication/api";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
@@ -31,7 +32,7 @@ function NewGame(props) {
 
   useEffect(async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship({
@@ -54,7 +55,7 @@ function NewGame(props) {
 
     if (idGame) {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `${process.env.REACT_APP_API_BASE}game/${idGame}`
         );
         setGame({
@@ -82,14 +83,24 @@ function NewGame(props) {
   const handleSave = async (event) => {
     event.preventDefault();
 
-    try {
-      const response = await axios.patch(
-        `${process.env.REACT_APP_API_BASE}game/${game._id}`,
-        game
+    if (idGame) {
+      try {
+        const response = await api.patch(
+          `${process.env.REACT_APP_API_BASE}game/${game._id}`,
+          game
+        );
+        history.push(`/campeonatos/detalhes/${idChampionship}/jogos`);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      const { _id, ...NewGame } = game;
+
+      const response = await api.post(
+        `${process.env.REACT_APP_API_BASE}game`,
+        NewGame
       );
       history.push(`/campeonatos/detalhes/${idChampionship}/jogos`);
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -98,7 +109,7 @@ function NewGame(props) {
 
     if (idGame) {
       try {
-        const response = await axios.patch(
+        const response = await api.patch(
           `${process.env.REACT_APP_API_BASE}game/${game._id}`,
           game
         );
@@ -111,7 +122,7 @@ function NewGame(props) {
     } else {
       const { _id, ...NewGame } = game;
 
-      const response = await axios.post(
+      const response = await api.post(
         `${process.env.REACT_APP_API_BASE}game`,
         NewGame
       );
@@ -126,7 +137,7 @@ function NewGame(props) {
 
     if (idGame) {
       try {
-        const response = await axios.patch(
+        const response = await api.patch(
           `${process.env.REACT_APP_API_BASE}game/${game._id}`,
           game
         );
@@ -146,7 +157,7 @@ function NewGame(props) {
     } else {
       const { _id, ...NewGame } = game;
 
-      const response = await axios.post(
+      const response = await api.post(
         `${process.env.REACT_APP_API_BASE}game`,
         NewGame
       );
@@ -167,7 +178,7 @@ function NewGame(props) {
     event.preventDefault();
 
     try {
-      const response = await axios.delete(
+      const response = await api.delete(
         `${process.env.REACT_APP_API_BASE}game/${idGame}`
       );
       history.push(`/campeonatos/detalhes/${idChampionship}/jogos`);
