@@ -1,6 +1,6 @@
-import axios from "axios";
 import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import api from "../../autenntication/api";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
@@ -22,7 +22,7 @@ function Games(props) {
 
   useEffect(async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship({
@@ -39,7 +39,7 @@ function Games(props) {
       console.error(error);
     }
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${process.env.REACT_APP_API_BASE}games/${idChampionship}`
       );
       setGames(response.data);

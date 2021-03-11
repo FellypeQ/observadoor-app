@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../../autenntication/api";
 
 import CardCampeonato from "../../components/CardCampeonato";
 
@@ -13,7 +13,7 @@ function Campeonatos(props) {
 
   useEffect(async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${process.env.REACT_APP_API_BASE}championships`
       );
       setChampionships({
