@@ -12,6 +12,7 @@ import ChampionshipDetail from "./views/campeonatos/ChampionshipDetail";
 import NewGame from "./views/new-game/NewGame";
 import Games from "./views/games/Games";
 import Athletic from "./views/athletic/Athletic";
+import Register from "./views/register/index"
 
 function App() {
   const dbchampionship = {
@@ -31,6 +32,7 @@ function App() {
       <AuthContextComponent>
         <Switch>
           <Route exact path="/" component={Login} />
+          <Route exact path="/register" component={Register} />
           <PrivateRoute exact path="/campeonatos" component={Campeonatos} />
           <PrivateRoute
             exact
@@ -53,7 +55,6 @@ function App() {
             path="/campeonatos/detalhes/:id/jogos/novo"
             component={NewGame}
           />
-
           <PrivateRoute
             exact
             path="/campeonatos/detalhes/:id/jogos/:gameId"
