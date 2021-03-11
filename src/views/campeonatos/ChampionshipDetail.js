@@ -1,13 +1,11 @@
 import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import axios from "axios";
+import api from "../../autenntication/api";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 
 function ChampionshipDetail(props) {
-  const userID = "602dbe9df1f9663f20cb33aa";
-
-  const nomeObsevador = localStorage.login;
+  const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
   const [championship, setChampionship] = useState({
     name: "",
     localization: "",
@@ -23,7 +21,7 @@ function ChampionshipDetail(props) {
   useEffect(async () => {
     if (idChampionship) {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
         );
         setChampionship({
@@ -54,7 +52,7 @@ function ChampionshipDetail(props) {
 
     if (idChampionship) {
       try {
-        const response = await axios.patch(
+        const response = await api.patch(
           `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`,
           championship
         );
@@ -63,11 +61,10 @@ function ChampionshipDetail(props) {
         console.error(err);
       }
     } else {
-      const newChampionship = { ...championship, userID: userID };
       try {
-        const response = await axios.post(
+        const response = await api.post(
           `${process.env.REACT_APP_API_BASE}championship`,
-          newChampionship
+          championship
         );
         history.push("/campeonatos");
       } catch (err) {
@@ -81,7 +78,7 @@ function ChampionshipDetail(props) {
 
     if (idChampionship) {
       try {
-        const response = await axios.patch(
+        const response = await api.patch(
           `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`,
           championship
         );
@@ -90,11 +87,10 @@ function ChampionshipDetail(props) {
         console.error(err);
       }
     } else {
-      const newChampionship = { ...championship, userID: userID };
       try {
-        const response = await axios.post(
+        const response = await api.post(
           `${process.env.REACT_APP_API_BASE}championship`,
-          newChampionship
+          championship
         );
         history.push(
           `/campeonatos/detalhes/${response.data.result._id}/jogos/novo`
@@ -109,7 +105,7 @@ function ChampionshipDetail(props) {
     event.preventDefault();
 
     try {
-      const response = await axios.delete(
+      const response = await api.delete(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       history.push("/campeonatos");
@@ -122,7 +118,7 @@ function ChampionshipDetail(props) {
     <form className="campeonato ">
       <ChampionshipInfo
         name={championship.name}
-        nomeObsevador={nomeObsevador}
+        nomeObsevador={nomeObsevador.user.name}
         handleChange={handleChange}
         localization={championship.localization}
         competionDate={championship.competionDate}
