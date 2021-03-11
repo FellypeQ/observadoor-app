@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 
 import Inputs from "../../components/Inputs";
 import Game from "../../components/Game";
-import axios from "axios";
+import api from "../../autenntication/api";
 
 function Athletic(props) {
   const idChampionship = props.match.params.id;
@@ -33,11 +33,12 @@ function Athletic(props) {
     mobility: "",
     finalization: "",
     comentary: "",
+    userID: "",
   });
 
   useEffect(async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship(response.data.name);
@@ -45,7 +46,7 @@ function Athletic(props) {
       console.error(error);
     }
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${process.env.REACT_APP_API_BASE}game/${idGame}`
       );
       setGame({
