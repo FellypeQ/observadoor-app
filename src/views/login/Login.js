@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 
 function Login(props) {
   const [formLogin, setFormLogin] = useState({ email: "", senha: "" });
@@ -48,6 +48,12 @@ function Login(props) {
           onChange={handleChange}
         />
         <button className="btn btn-black text-18px">Entrar </button>
+        <Link
+          to={`/register`}
+          className="btn btn-blue text-14px mg-b-5 text-decore-none"
+        >
+          Não tem Cadastro? Cadastre-se!
+        </Link>
       </form>
     </div>
   );

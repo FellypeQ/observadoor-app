@@ -9,6 +9,7 @@ import ChampionshipDetail from "./views/campeonatos/ChampionshipDetail";
 import NewGame from "./views/new-game/NewGame";
 import Games from "./views/games/Games";
 import Athletic from "./views/athletic/Athletic";
+import Register from "./views/register/index"
 
 function App() {
   const dbchampionship = {
@@ -29,6 +30,7 @@ function App() {
         <Route exact path="/" component={Login} />
         <Route exact path="/campeonatos" component={Campeonatos} />
         <Route exact path="/campeonatos/novo" component={ChampionshipDetail} />
+        <Route exact path="/register" component={Register} />
         <Redirect exact from="/campeonatos/detalhes" to="/campeonatos" />
         <Route
           exact
