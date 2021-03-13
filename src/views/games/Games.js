@@ -10,6 +10,7 @@ function Games(props) {
 
   const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
   const [championship, setChampionship] = useState({
+    id: "",
     name: "",
     localization: "",
     competionDate: "",
@@ -26,6 +27,7 @@ function Games(props) {
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship({
+        id: response.data._id,
         name: response.data.name,
         localization: response.data.localization,
         competionDate: response.data.competionDate
@@ -89,6 +91,7 @@ function Games(props) {
             handleLikeAthletic={handleLikeAthletic}
             edition={true}
             idGame={game._id}
+            idChanpionship={championship.id}
             handleEdition={handleEdition}
           />
         ))}

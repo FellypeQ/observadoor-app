@@ -13,6 +13,7 @@ import NewGame from "./views/new-game/NewGame";
 import Games from "./views/games/Games";
 import Athletic from "./views/athletic/Athletic";
 import Register from "./views/register/index";
+import AthleticList from "./views/athletic/AthleticList";
 
 function App() {
   return (
@@ -53,6 +54,11 @@ function App() {
             exact
             path="/campeonatos/detalhes/:id/jogos/:gameId/novo-atleta"
             component={Athletic}
+          />
+          <PrivateRoute
+            exact
+            path="/campeonatos/detalhes/:id/jogos/:gameId/athlets"
+            component={AthleticList}
           />
           <PrivateRoute
             exact

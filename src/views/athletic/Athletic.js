@@ -3,10 +3,13 @@ import { React, useEffect, useState } from "react";
 import Inputs from "../../components/Inputs";
 import Game from "../../components/Game";
 import api from "../../autenntication/api";
+import { Link, useHistory } from "react-router-dom";
 
 function Athletic(props) {
+  const history = useHistory();
   const idChampionship = props.match.params.id;
   const idGame = props.match.params.gameId;
+  const idAthlete = props.match.params.athleteId;
   const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
   const [championship, setChampionship] = useState("");
   const [game, setGame] = useState({
@@ -53,24 +56,62 @@ function Athletic(props) {
 
   useEffect(async () => {
     try {
-      const response = await api.get(
+      const respChampionship = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
-      setChampionship(response.data.name);
+      setChampionship(respChampionship.data.name);
     } catch (error) {
       console.error(error);
     }
     try {
-      const response = await api.get(
+      const respGame = await api.get(
         `${process.env.REACT_APP_API_BASE}game/${idGame}`
       );
       setGame({
-        gameName: response.data.gameName,
-        dateGame: response.data.dateGame.replace("Z", ""),
-        category: response.data.category,
-        teamA: response.data.teamA,
-        teamB: response.data.teamB,
+        gameName: respGame.data.gameName,
+        dateGame: respGame.data.dateGame.replace("Z", ""),
+        category: respGame.data.category,
+        teamA: respGame.data.teamA,
+        teamB: respGame.data.teamB,
       });
+
+      if (props.match.params.athleteId) {
+        try {
+          const respAthlete = await api.get(
+            `${process.env.REACT_APP_API_BASE}athlete/${idAthlete}`
+          );
+
+          seAthlete({
+            idGame: respAthlete.data.idGame,
+            idChampionship: respAthlete.data.idChampionship,
+            pictture: respAthlete.data.pictture,
+            name: respAthlete.data.name,
+            year: respAthlete.data.year,
+            birthDate: respAthlete.data.birthDate,
+            team: respAthlete.data.team,
+            shirtNumber: respAthlete.data.shirtNumber,
+            skillLeg: respAthlete.data.skillLeg,
+            shortPass: respAthlete.data.shortPass,
+            longPass: respAthlete.data.longPass,
+            header: respAthlete.data.header,
+            position: respAthlete.data.position,
+            velocity: respAthlete.data.velocity,
+            reactionPower: respAthlete.data.reactionPower,
+            mobility: respAthlete.data.mobility,
+            finalization: respAthlete.data.finalization,
+            comentary: respAthlete.data.comentary,
+            contacts: respAthlete.data.contacts,
+            avaliationStatus: respAthlete.data.avaliationStatus,
+            avaliationInClub: respAthlete.data.avaliationInClub,
+            competitionEvaluators: respAthlete.data.competitionEvaluators,
+            morePhotos: respAthlete.data.morePhotos,
+            documentPhotos: respAthlete.data.documentPhotos,
+            userID: respAthlete.data.userID,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       console.error(error);
     }
@@ -100,7 +141,42 @@ function Athletic(props) {
   const handleSave = async (event) => {
     event.preventDefault();
 
-    console.log(athlete);
+    if (props.match.params.athleteId) {
+      console.log("atualizando");
+      try {
+        const respUpdateAthlete = await api.patch(
+          `${process.env.REACT_APP_API_BASE}athlete/${idAthlete}`,
+          athlete
+        );
+        console.log("atualizado");
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log("criando");
+      try {
+        const respCreateAthlete = await api.post(
+          `${process.env.REACT_APP_API_BASE}athlete`,
+          athlete
+        );
+        console.log("criado");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      const respDeleteAthlete = await api.delete(
+        `${process.env.REACT_APP_API_BASE}athlete/${idAthlete}`,
+        athlete
+      );
+      history.push(
+        `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/athlets`
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -160,7 +236,11 @@ function Athletic(props) {
           label="Data de nascimento: "
           type="date"
           name="birthDate"
-          value={athlete.birthDate.split("T")[0]}
+          value={
+            athlete.birthDate
+              ? athlete.birthDate.split("T")[0]
+              : athlete.birthDate
+          }
           onChange={handleChange}
         />
         <Inputs
@@ -368,7 +448,15 @@ function Athletic(props) {
         <button className="btn btn-green mg-y-2 " onClick={handleSave}>
           Salvar
         </button>
-        <button className="btn btn-red mg-y-2 ">Excluir</button>
+        <button className="btn btn-red mg-y-2 " onClick={handleDelete}>
+          Excluir
+        </button>
+        <Link
+          to={`/campeonatos/detalhes/${idChampionship}/jogos`}
+          className="text-decore-none"
+        >
+          <button className="btn btn-blue mg-y-2 ">Voltar para jogos</button>
+        </Link>
       </div>
     </div>
   );

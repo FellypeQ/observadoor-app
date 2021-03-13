@@ -1,4 +1,5 @@
 import { React } from "react";
+import { Link } from "react-router-dom";
 
 function Game(props) {
   return (
@@ -93,6 +94,17 @@ function Game(props) {
           >
             Gostei do atleta
           </button>
+        )}
+        {props.edition ? (
+          <Link
+            to={`/campeonatos/detalhes/${props.idChanpionship}/jogos/${props.idGame}/athlets`}
+          >
+            <button className="btn btn-green mg-t-2 wid-95">
+              Atletas marcados como gostei
+            </button>
+          </Link>
+        ) : (
+          <></>
         )}
       </section>
     </form>
