@@ -8,6 +8,8 @@ function PrivateRoute({ component: Component, ...rest }) {
   const authContext = useContext(AuthContext);
 
   const [validToken, setValidToken] = useState(true);
+
+  /*
   useEffect(async () => {
     try {
       const response = await api.get(
@@ -20,6 +22,8 @@ function PrivateRoute({ component: Component, ...rest }) {
       localStorage.clear();
     }
   }, []);
+  */
+
   return (
     <Route
       {...rest}
