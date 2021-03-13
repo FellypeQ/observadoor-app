@@ -1,8 +1,7 @@
 import { React, useContext, useState } from "react";
-import { Link,useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../../autenntication/authContext";
 import api from "../../autenntication/api";
-
 
 function Login(props) {
   const [formLogin, setFormLogin] = useState({ email: "", senha: "" });
@@ -18,6 +17,7 @@ function Login(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    localStorage.clear();
 
     try {
       const response = await api.post(

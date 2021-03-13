@@ -12,21 +12,9 @@ import ChampionshipDetail from "./views/campeonatos/ChampionshipDetail";
 import NewGame from "./views/new-game/NewGame";
 import Games from "./views/games/Games";
 import Athletic from "./views/athletic/Athletic";
-import Register from "./views/register/index"
+import Register from "./views/register/index";
 
 function App() {
-  const dbchampionship = {
-    _id: "aaaaaaaaa",
-    name: "Copa Favela",
-    localization: "Salvador/BA",
-    competionDate: "2019-06-25",
-    category: "Sub 10 até Sub 17",
-    responsible: "João Carlos",
-    details:
-      "Evento realizado pelo professor João Carlos há mais de 10 anos. Revelou jogadores como: Davi, Pelé, Zico e companhia... Nível técnico muito bom. Observadores dos principais clubes sempre estão presentes. Tem um garoto 2009 que está chamando atenção e já é monitorado há 2 anos.",
-  };
-  localStorage.setItem("dbchampionship", JSON.stringify(dbchampionship));
-
   return (
     <BrowserRouter>
       <AuthContextComponent>

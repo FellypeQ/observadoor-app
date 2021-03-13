@@ -7,17 +7,17 @@ import api from "./api";
 function PrivateRoute({ component: Component, ...rest }) {
   const authContext = useContext(AuthContext);
 
-  const [validToken, setValidToken] = useState(0);
+  const [validToken, setValidToken] = useState(true);
   useEffect(async () => {
     try {
       const response = await api.get(
         `${process.env.REACT_APP_API_BASE}usuario/verifytoken`
       );
     } catch (error) {
-      if (error.response.status === 401) {
-        setValidToken(401);
-      }
+      console.log(error.response.status);
       console.error(error);
+      setValidToken(false);
+      localStorage.clear();
     }
   }, []);
   return (
@@ -26,7 +26,7 @@ function PrivateRoute({ component: Component, ...rest }) {
       render={(routeProps) => {
         if (authContext.loggedInUser) {
           if (authContext.loggedInUser.user._id) {
-            if (validToken === 0) {
+            if (validToken) {
               return <Component {...routeProps} {...rest} />;
             } else {
               return (
