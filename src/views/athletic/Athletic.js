@@ -123,6 +123,44 @@ function Athletic(props) {
       [event.target.name]: event.target.value,
     });
   };
+  function changeContacts(event, typeChange, index, key, value) {
+    event.preventDefault();
+
+    if (typeChange === "change") {
+      let tempListContact = athlete.contacts;
+
+      tempListContact[index][key] = value;
+
+      seAthlete({
+        ...athlete,
+        contacts: tempListContact,
+      });
+    }
+    if (typeChange === "add") {
+      let tempListContact = athlete.contacts;
+
+      tempListContact.push({
+        name: "",
+        phone: "",
+        responsable: "",
+      });
+
+      seAthlete({
+        ...athlete,
+        contacts: tempListContact,
+      });
+    }
+    if (typeChange === "delete") {
+      let tempListContact = athlete.contacts;
+
+      tempListContact.splice(index, 1);
+
+      seAthlete({
+        ...athlete,
+        contacts: tempListContact,
+      });
+    }
+  }
   const handleChangePageAvance = () => {
     if (pageAthlete === 3) {
       return;
@@ -358,40 +396,78 @@ function Athletic(props) {
         {pageAthlete === 2 && (
           <div>
             <h4>Contatos</h4>
-            <Inputs
-              label="Nome: "
-              placeholder="Nome do contato"
-              type="text"
-              name="name"
-              value={""}
-              onChange={handleChange}
-            />
-            <Inputs
-              label="Telefone: "
-              placeholder="Telefone do contato"
-              type="text"
-              name="name"
-              value={""}
-              onChange={handleChange}
-            />
-            <Inputs
-              format="select"
-              label="Responsável: "
-              name="name"
-              value={""}
-              options={[
-                "Selecione o responsárvel",
-                "Pai",
-                "Mãe",
-                "Empresário",
-                "Tio(a)",
-                "Irmão",
-                "Irmã",
-                "Amigo(a)",
-                "Outro",
-              ]}
-              onChange={handleChange}
-            />
+            {athlete.contacts.map((contact, index) => (
+              <div key={index} className="bdtt">
+                <Inputs
+                  label="Nome: "
+                  placeholder="Nome do contato"
+                  type="text"
+                  name="name"
+                  value={contact.name}
+                  onChange={(event) =>
+                    changeContacts(
+                      event,
+                      "change",
+                      index,
+                      "name",
+                      event.target.value
+                    )
+                  }
+                />
+                <Inputs
+                  label="Telefone: "
+                  placeholder="Telefone do contato"
+                  type="text"
+                  name="phone"
+                  value={contact.phone}
+                  onChange={(event) =>
+                    changeContacts(
+                      event,
+                      "change",
+                      index,
+                      "phone",
+                      event.target.value
+                    )
+                  }
+                />
+                <Inputs
+                  format="select"
+                  label="Responsável: "
+                  name="responsable"
+                  value={contact.responsable}
+                  options={[
+                    "Selecione o responsárvel",
+                    "Pai",
+                    "Mãe",
+                    "Empresário",
+                    "Tio(a)",
+                    "Irmão",
+                    "Irmã",
+                    "Amigo(a)",
+                    "Outro",
+                  ]}
+                  onChange={(event) =>
+                    changeContacts(
+                      event,
+                      "change",
+                      index,
+                      "responsable",
+                      event.target.value
+                    )
+                  }
+                />
+                <button onClick={(event) => changeContacts(event, "add")}>
+                  Adicionar outro contato
+                </button>
+                {index > 0 && (
+                  <button
+                    onClick={(event) => changeContacts(event, "delete", index)}
+                  >
+                    Escluir contato
+                  </button>
+                )}
+              </div>
+            ))}
             <h5>Status da avaliação:</h5>
             <Inputs
               format="radio"

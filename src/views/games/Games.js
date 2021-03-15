@@ -96,7 +96,7 @@ function Games(props) {
           />
         ))}
       </section>
-      <sectionbtnjogo className="mg-t-5 disp-flex flex-wrap align-center just-sp-evenly">
+      <section className="mg-t-5 disp-flex flex-wrap align-center just-sp-evenly">
         <Link
           to={`/campeonatos/detalhes/${idChampionship}/jogos/novo`}
           className="btn btn-green text-14px mg-b-5 text-decore-none"
@@ -109,7 +109,7 @@ function Games(props) {
         >
           Voltar para Campeonatos
         </Link>
-      </sectionbtnjogo>
+      </section>
     </div>
   );
 }
