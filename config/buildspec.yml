@@ -14,7 +14,7 @@ phases:
     
 artifacts:
   files:
-    - config/**
+    - config/**/**
     - public/**/**
     - src/**/**/**
     - .env
