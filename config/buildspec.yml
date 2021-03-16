@@ -1,0 +1,23 @@
+version : 0.2
+phases:
+  pre_build:
+    commands:
+      - npm install
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+    
+artifacts:
+  files:
+    - config/**
+    - public/**/**
+    - src/**/**/**
+    - .env
+    - package.json
+    - appspec.yml
+  
