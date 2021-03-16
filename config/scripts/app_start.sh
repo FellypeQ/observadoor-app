@@ -1,11 +1,11 @@
 #!/bin/bash
-cd /home/ubuntu/api/app
+cd /home/ubuntu/app
 echo "Abrindo pasta da API com novo Build"
 sudo rm -Rf /opt/app/observador/
 echo "Limpando Diretório /opt/app/observador"
-sudo cp -r /home/ubuntu/api/app/ /opt/app/observador
+sudo cp -r /home/ubuntu/app /opt/app/observador
 echo "Movendo a Pasta do Novo Build para /opt/app/observador"
-sudo rm -r /home/ubuntu/api/app/*
+sudo rm -r /home/ubuntu/app/*
 echo "Limpando Pasta do Server"
 cd /opt/app/observador
 echo "Acessando Pasta do Servidor"
