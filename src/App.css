@@ -10,8 +10,6 @@
   background-size: cover;
 }
 .login form {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
   width: 30%;
   min-width: 300px;
   height: 35%;
@@ -91,4 +89,10 @@
 }
 input:disabled {
   background-color: #ffffff;
+}
+.error {
+  color: #ff0000;
+}
+.error-border {
+  border: #ff0000 solid 1px;
 }

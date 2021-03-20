@@ -6,11 +6,6 @@
 input {
   border: none;
 }
-input :focus {
-  background-color: black;
-  color: white;
-  outline: none;
-}
 .full-screen {
   height: 100vh;
 }
@@ -215,4 +210,7 @@ input :focus {
 }
 .text-decore-none {
   text-decoration: none;
+}
+.text-white {
+  color: #ffffff;
 }
