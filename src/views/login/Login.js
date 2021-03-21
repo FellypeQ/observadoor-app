@@ -1,13 +1,15 @@
 import { React, useContext, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../autenntication/authContext";
 import api from "../../autenntication/api";
 import {
+  ThemeProvider,
   CircularProgress,
-  InputLabel,
-  InputBases,
-  InputBase,
+  TextField,
+  Button,
+  Link,
 } from "@material-ui/core";
+import themes from "../../themes";
 
 function Login(props) {
   const [formLogin, setFormLogin] = useState({ email: "", senha: "" });
@@ -22,8 +24,8 @@ function Login(props) {
   const history = useHistory();
 
   const handleChange = (event) => {
-    const name = event.target.attributes.name.value;
-    const value = event.currentTarget.value;
+    const name = event.target.name;
+    const value = event.target.value;
     setFormLogin({ ...formLogin, [name]: value });
   };
 
@@ -49,13 +51,23 @@ function Login(props) {
       history.push("/campeonatos");
       window.location.reload(true);
     } catch (error) {
+      let description = "";
+      switch (error.response.status) {
+        case 401:
+          description = "Email ou senha incorretos";
+          break;
+        default:
+          description = "Erro no servidor, por favor, tente novamente";
+          break;
+      }
+
       setLoading({
         ...loading,
         login: false,
       });
       setError({
         ...error,
-        login: error.response.status,
+        login: description, //error.response.status,
       });
       console.error("respLogin", error);
     }
@@ -66,53 +78,48 @@ function Login(props) {
       className=" full-screen disp-flex just-center align-center login background-image"
       style={{ backgroundImage: "url('/images/background-lgoin.jpg')" }}
     >
-      <form
-        className="disp-flex flex-direct-col align-center just-center"
-        onSubmit={handleSubmit}
-      >
-        <label className="text-24px text-center">
-          Bem vindo ao Observadoor!
-        </label>
-        {loading.login ? (
-          <CircularProgress color="primary" size={80} />
-        ) : (
-          <>
-            <label>E-mail</label>
-            <input
-              className={`${error.login === 401 && "error-border"}`}
-              type="email"
-              placeholder="digite seu e-mail"
-              name="email"
-              value={formLogin.email}
-              onChange={handleChange}
-            />
-            <label>Senha</label>
-            <input
-              className={`${error.login === 401 && "error-border"}`}
-              type="password"
-              placeholder="Digite sua senha"
-              name="senha"
-              value={formLogin.senha}
-              onChange={handleChange}
-            />
-            {error.login === 401 && (
-              <p className="error">Email ou senha incorretos</p>
-            )}
-            {error.login === 500 && (
-              <p className="error">
-                Erro de conexão, por favor tente novamente
-              </p>
-            )}
-            <button className="btn btn-black text-18px">Entrar </button>
-            <Link
-              to={`/register`}
-              className="btn btn-blue text-14px mg-b-5 text-decore-none"
-            >
-              Não tem Cadastro? Cadastre-se!
-            </Link>
-          </>
-        )}
-      </form>
+      <ThemeProvider theme={themes}>
+        <form
+          className="disp-flex flex-direct-col align-center just-center just-sp-evenly pad-2 background-gray"
+          onSubmit={handleSubmit}
+        >
+          <p className="text-24px text-center">Bem vindo ao Observadoor!</p>
+          {loading.login ? (
+            <CircularProgress color="primary" size={80} />
+          ) : (
+            <>
+              <TextField
+                label="E-mail"
+                required={true}
+                type="email"
+                error={error.login !== "" ? true : false}
+                helperText={error.login}
+                name="email"
+                value={formLogin.email}
+                onChange={handleChange}
+              />
+              <TextField
+                label="Senha"
+                required={true}
+                type="password"
+                error={error.login !== "" ? true : false}
+                helperText={error.login}
+                name="senha"
+                value={formLogin.senha}
+                onChange={handleChange}
+              />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleSubmit}
+              >
+                Entrar
+              </Button>
+              <Link href="/register">Não tem Cadastro? Cadastre-se!</Link>
+            </>
+          )}
+        </form>
+      </ThemeProvider>
     </div>
   );
 }
