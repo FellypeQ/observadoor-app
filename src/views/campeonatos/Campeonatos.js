@@ -2,8 +2,13 @@ import { React, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../autenntication/api";
 
-import { CircularProgress, TextField, IconButton } from "@material-ui/core";
-//import {  } from "@material-ui/";
+import {
+  CircularProgress,
+  TextField,
+  InputAdornment,
+  IconButton,
+} from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
 
 import CardCampeonato from "../../components/CardCampeonato";
 
@@ -55,16 +60,17 @@ function Campeonatos(props) {
           type="search"
           label="Pesquisar o campeonato"
           size="small"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          className="wid-90"
+          value={championships.search}
+          onChange={handleSearch}
         />
-        <div className="disp-flex align-center just-sp-between search wid-80">
-          <img src="/images/icon-search.png" />
-          <input
-            type="search"
-            placeholder="Pesquisar pelo nome do campeonato"
-            value={championships.search}
-            onChange={handleSearch}
-          />
-        </div>
         <input type="date" className="date-championships" />
         <Link to="/campeonatos/novo">
           <button className="btn btn-black">Novo torneio </button>

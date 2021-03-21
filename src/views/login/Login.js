@@ -8,7 +8,11 @@ import {
   Button,
   Link,
   FormControl,
+  InputAdornment,
+  IconButton,
 } from "@material-ui/core";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
 function Login(props) {
   const [formLogin, setFormLogin] = useState({ email: "", senha: "" });
@@ -19,6 +23,7 @@ function Login(props) {
   const [error, setError] = useState({
     login: "",
   });
+  const [passwordView, setPasswordView] = useState(false);
 
   const history = useHistory();
 
@@ -90,12 +95,25 @@ function Login(props) {
           <TextField
             label="Senha"
             required={true}
-            type="password"
+            type={passwordView ? "text" : "password"}
             error={error.login !== "" ? true : false}
             helperText={error.login}
             name="senha"
             value={formLogin.senha}
             onChange={handleChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={(event) => {
+                      setPasswordView(!passwordView);
+                    }}
+                  >
+                    {passwordView ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <Button
             variant="contained"
