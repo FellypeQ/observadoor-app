@@ -19,10 +19,15 @@ function Athletic(props) {
     teamA: "",
     teamB: "",
   });
+  const [athletePhotos, setAthletePhotos] = useState({
+    principal: "",
+    others: [],
+    documents: [],
+  });
   const [athlete, seAthlete] = useState({
     idGame: idGame,
     idChampionship: idChampionship,
-    pictture: "",
+    picture: athletePhotos.principal,
     name: "",
     year: "",
     birthDate: "",
@@ -179,7 +184,7 @@ function Athletic(props) {
   const handleSave = async (event) => {
     event.preventDefault();
 
-    if (props.match.params.athleteId) {
+    if (idAthlete) {
       console.log("atualizando");
       try {
         const respUpdateAthlete = await api.patch(
@@ -197,7 +202,12 @@ function Athletic(props) {
           `${process.env.REACT_APP_API_BASE}athlete`,
           athlete
         );
+        console.log(respCreateAthlete);
+        history.push(
+          `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/${respCreateAthlete.data.result._id}`
+        );
         console.log("criado");
+        window.location.reload(true);
       } catch (error) {
         console.error(error);
       }
@@ -216,6 +226,18 @@ function Athletic(props) {
       console.error(error);
     }
   };
+
+  function saveImage(event, group) {
+    event.preventDefault();
+
+    setAthletePhotos({
+      ...athletePhotos,
+      [group]:
+        "https://media.macphun.com/img/uploads/customer/how-to/579/15531840725c93b5489d84e9.43781620.jpg?q=85&w=1340",
+    });
+
+    //handleSave(event);
+  }
 
   return (
     <div>
@@ -246,14 +268,21 @@ function Athletic(props) {
             ? "Novo Atleta"
             : "Editar Atleta"}
         </h5>
-        <img alt="picture" src={athlete.pictture} />
-        <Inputs
-          label="Foto atleta"
-          type="file"
-          className="disp-block"
-          name="picture"
-          onChange={handleChange}
-        />
+        {!idAthlete ? (
+          <p>Para inserir fotos, é necessário salvar o cadastro antes</p>
+        ) : (
+          <>
+            <img alt="picture" src={athletePhotos.principal} />
+            <Inputs
+              label="Foto atleta"
+              type="file"
+              className="disp-block"
+              onChange={(event) => {
+                saveImage(event, "principal");
+              }}
+            />
+          </>
+        )}
         <Inputs
           label="Nome: "
           type="text"

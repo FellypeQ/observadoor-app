@@ -2,7 +2,8 @@ import { React, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../autenntication/api";
 
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, TextField, IconButton } from "@material-ui/core";
+//import {  } from "@material-ui/";
 
 import CardCampeonato from "../../components/CardCampeonato";
 
@@ -49,6 +50,12 @@ function Campeonatos(props) {
     <div className="full-screen campeonato">
       <h2>Torneios e competições</h2>
       <section className="disp-flex align-center flex-wrap just-sp-evenly">
+        <TextField
+          variant="outlined"
+          type="search"
+          label="Pesquisar o campeonato"
+          size="small"
+        />
         <div className="disp-flex align-center just-sp-between search wid-80">
           <img src="/images/icon-search.png" />
           <input

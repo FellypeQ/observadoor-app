@@ -3,16 +3,16 @@ import { createMuiTheme } from "@material-ui/core";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#43a047",
-      light: "#76d275",
-      dark: "#00701a",
-      contrastText: "#000000",
-    },
-    secondary: {
       main: "#424242",
       light: "#6d6d6d",
       dark: "#1b1b1b",
       contrastText: "#ffffff",
+    },
+    secondary: {
+      main: "#a5d6a7",
+      light: "#d7ffd9",
+      dark: "#75a478",
+      contrastText: "#212121",
     },
   },
   overrides: {
@@ -21,6 +21,17 @@ const theme = createMuiTheme({
         color: "black",
       },
     },
+    MuiTextField: {
+      root: {
+        margin: "3%",
+      },
+    },
+    MuiButton: {
+      root: {
+        margin: "3%",
+      },
+    },
+    MuiFormControl: { root: { padding: "2% 4%" } },
   },
 });
 

@@ -3,13 +3,12 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../autenntication/authContext";
 import api from "../../autenntication/api";
 import {
-  ThemeProvider,
   CircularProgress,
   TextField,
   Button,
   Link,
+  FormControl,
 } from "@material-ui/core";
-import themes from "../../themes";
 
 function Login(props) {
   const [formLogin, setFormLogin] = useState({ email: "", senha: "" });
@@ -73,53 +72,56 @@ function Login(props) {
     }
   };
 
+  function render(login) {
+    if (login) {
+      return <CircularProgress color="primary" size={80} />;
+    } else {
+      return (
+        <>
+          <TextField
+            label="E-mail"
+            required={true}
+            type="email"
+            error={error.login !== "" ? true : false}
+            name="email"
+            value={formLogin.email}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Senha"
+            required={true}
+            type="password"
+            error={error.login !== "" ? true : false}
+            helperText={error.login}
+            name="senha"
+            value={formLogin.senha}
+            onChange={handleChange}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            classes="mg-y-2"
+          >
+            Entrar
+          </Button>
+          <Link href="/register">Não tem Cadastro? Cadastre-se!</Link>
+        </>
+      );
+    }
+  }
   return (
     <div
       className=" full-screen disp-flex just-center align-center login background-image"
       style={{ backgroundImage: "url('/images/background-lgoin.jpg')" }}
     >
-      <ThemeProvider theme={themes}>
-        <form
-          className="disp-flex flex-direct-col align-center just-center just-sp-evenly pad-2 background-gray"
-          onSubmit={handleSubmit}
-        >
-          <p className="text-24px text-center">Bem vindo ao Observadoor!</p>
-          {loading.login ? (
-            <CircularProgress color="primary" size={80} />
-          ) : (
-            <>
-              <TextField
-                label="E-mail"
-                required={true}
-                type="email"
-                error={error.login !== "" ? true : false}
-                helperText={error.login}
-                name="email"
-                value={formLogin.email}
-                onChange={handleChange}
-              />
-              <TextField
-                label="Senha"
-                required={true}
-                type="password"
-                error={error.login !== "" ? true : false}
-                helperText={error.login}
-                name="senha"
-                value={formLogin.senha}
-                onChange={handleChange}
-              />
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleSubmit}
-              >
-                Entrar
-              </Button>
-              <Link href="/register">Não tem Cadastro? Cadastre-se!</Link>
-            </>
-          )}
-        </form>
-      </ThemeProvider>
+      <FormControl
+        className="disp-flex flex-direct-col align-center just-center just-sp-evenly background-gray"
+        onSubmit={handleSubmit}
+      >
+        <p className="text-24px text-center">Bem vindo ao Observadoor!</p>
+        {render(loading.login)}
+      </FormControl>
     </div>
   );
 }
