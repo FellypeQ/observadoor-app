@@ -2,6 +2,8 @@ import { React, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../autenntication/api";
 
+import { CircularProgress } from "@material-ui/core";
+
 import CardCampeonato from "../../components/CardCampeonato";
 
 function Campeonatos(props) {
@@ -10,8 +12,10 @@ function Campeonatos(props) {
     filterList: [],
     originalList: [],
   });
+  const [loading, setLoading] = useState({ championshipList: false });
 
   useEffect(async () => {
+    setLoading({ ...loading, championshipList: true });
     try {
       const response = await api.get(
         `${process.env.REACT_APP_API_BASE}championships`
@@ -21,7 +25,9 @@ function Campeonatos(props) {
         filterList: response.data,
         originalList: response.data,
       });
+      setLoading({ ...loading, championshipList: false });
     } catch (err) {
+      setLoading({ ...loading, championshipList: false });
       console.error(err);
     }
   }, []);
@@ -57,13 +63,21 @@ function Campeonatos(props) {
           <button className="btn btn-black">Novo torneio </button>
         </Link>
       </section>
-      {championships.filterList.map((championship, idx) => (
-        <CardCampeonato
-          key={idx}
-          idChampionship={championship._id}
-          name={championship.name}
-        />
-      ))}
+      {loading.championshipList ? (
+        <div className="disp-flex just-center ">
+          <CircularProgress size={80} />
+        </div>
+      ) : (
+        <>
+          {championships.filterList.map((championship, idx) => (
+            <CardCampeonato
+              key={idx}
+              idChampionship={championship._id}
+              name={championship.name}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 }

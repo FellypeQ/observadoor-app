@@ -2,6 +2,8 @@ import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import api from "../../autenntication/api";
 
+import { CircularProgress } from "@material-ui/core";
+
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 
 function ChampionshipDetail(props) {
@@ -17,9 +19,11 @@ function ChampionshipDetail(props) {
   });
   const history = useHistory();
   const idChampionship = props.match.params.id;
+  const [loading, setLoading] = useState({ championship: false });
 
   useEffect(async () => {
     if (idChampionship) {
+      setLoading({ ...loading, championship: true });
       try {
         const response = await api.get(
           `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
@@ -27,15 +31,15 @@ function ChampionshipDetail(props) {
         setChampionship({
           name: response.data.name,
           localization: response.data.localization,
-          competionDate: response.data.competionDate
-            ? response.data.competionDate.split("T")[0]
-            : "",
+          competionDate: response.data?.competionDate.split("T")[0],
           category: response.data.category,
           responsable: response.data.responsable,
           details: response.data.details,
           userID: response.data.userID,
         });
+        setLoading({ ...loading, championship: false });
       } catch (err) {
+        setLoading({ ...loading, championship: false });
         console.error(err);
       }
     }
@@ -124,16 +128,23 @@ function ChampionshipDetail(props) {
         competionDate={championship.competionDate}
         category={championship.category}
         responsable={championship.responsable}
+        loading={loading.championship}
       />
       <label className="wid-100 text-18px">Detalhes da competição</label>
-      <textarea
-        type="textarea"
-        className="wid-100 hei-30 mg-b-5"
-        placeholder="Detalhes da competição"
-        name="details"
-        value={championship.details}
-        onChange={handleChange}
-      />
+      {loading.championship ? (
+        <div className="disp-flex just-center hei-30 mg-b-5">
+          <CircularProgress />
+        </div>
+      ) : (
+        <textarea
+          type="textarea"
+          className="wid-100 hei-30 mg-b-5"
+          placeholder="Detalhes da competição"
+          name="details"
+          value={championship.details}
+          onChange={handleChange}
+        />
+      )}
       {idChampionship ? (
         <div className="disp-flex just-sp-evenly flex-wrap align-center">
           <button
