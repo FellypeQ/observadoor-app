@@ -8,8 +8,11 @@ import {
   Button,
   Link,
   FormControl,
+  OutlinedInput,
+  Input,
   InputAdornment,
   IconButton,
+  InputLabel,
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
@@ -92,29 +95,34 @@ function Login(props) {
             value={formLogin.email}
             onChange={handleChange}
           />
-          <TextField
-            label="Senha"
-            required={true}
-            type={passwordView ? "text" : "password"}
-            error={error.login !== "" ? true : false}
-            helperText={error.login}
-            name="senha"
-            value={formLogin.senha}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
+          <FormControl className="wid-65">
+            <InputLabel htmlFor="outlined-adornment-password" required={true}>
+              Password
+            </InputLabel>
+            <Input
+              id="standard-adornment-password"
+              type={passwordView ? "text" : "password"}
+              name="senha"
+              value={formLogin.senha}
+              onChange={handleChange}
+              required={true}
+              size="small"
+              endAdornment={
                 <InputAdornment position="end">
                   <IconButton
+                    aria-label="toggle password visibility"
                     onClick={(event) => {
                       setPasswordView(!passwordView);
                     }}
+                    edge="end"
                   >
                     {passwordView ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 </InputAdornment>
-              ),
-            }}
-          />
+              }
+            />
+          </FormControl>
+
           <Button
             variant="contained"
             color="primary"
