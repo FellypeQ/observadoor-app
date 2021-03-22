@@ -96,9 +96,7 @@ function Login(props) {
             onChange={handleChange}
           />
           <FormControl className="wid-65">
-            <InputLabel htmlFor="outlined-adornment-password" required={true}>
-              Password
-            </InputLabel>
+            <InputLabel required={true}>Password</InputLabel>
             <Input
               id="standard-adornment-password"
               type={passwordView ? "text" : "password"}
