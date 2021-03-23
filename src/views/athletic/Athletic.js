@@ -240,6 +240,10 @@ function Athletic(props) {
     //handleSave(event);
   }
 
+  const handleSalvarImagem = async () =>{
+    
+  }
+
   return (
     <div>
       <Inputs
@@ -286,7 +290,7 @@ function Athletic(props) {
                 saveImage(event, "principal");
               }}
             />
-            <button className="btn btn-black" onClick={handleSave}>Upload</button>
+            <button className="btn btn-black" onClick={handleSalvarImagem}>Upload</button>
           </div>
         )}
         <Inputs
