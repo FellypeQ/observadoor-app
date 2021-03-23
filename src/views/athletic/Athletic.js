@@ -1,9 +1,10 @@
 import { React, useEffect, useState } from "react";
-
 import Inputs from "../../components/Inputs";
 import Game from "../../components/Game";
 import api from "../../autenntication/api";
 import { Link, useHistory } from "react-router-dom";
+import './style.css'
+import Avatar from '@material-ui/core/Avatar';
 
 function Athletic(props) {
   const history = useHistory();
@@ -269,19 +270,24 @@ function Athletic(props) {
             : "Editar Atleta"}
         </h5>
         {!idAthlete ? (
-          <p>Para inserir fotos, é necessário salvar o cadastro antes</p>
+          <div>
+          </div>
         ) : (
-          <>
-            <img alt="picture" src={athletePhotos.principal} />
+          <div className="container">
+            <Avatar 
+              alt="fotoAtleta"
+              className="fotoAtleta"
+              src="https://img.elo7.com.br/product/main/163D2EF/adesivo-de-parede-jogador-de-futebol-futebol.jpg" />
             <Inputs
-              label="Foto atleta"
+              label="Img"
               type="file"
               className="disp-block"
               onChange={(event) => {
                 saveImage(event, "principal");
               }}
             />
-          </>
+            <button className="btn btn-black" onClick={handleSave}>Upload</button>
+          </div>
         )}
         <Inputs
           label="Nome: "

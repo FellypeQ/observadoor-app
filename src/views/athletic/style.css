@@ -1,0 +1,11 @@
+.container{
+    margin-top: 10px;
+    border-color: black;
+    align-items: left;
+}
+
+.container .fotoAtleta{
+    width: 150px;
+    height: 150px;
+    
+}
