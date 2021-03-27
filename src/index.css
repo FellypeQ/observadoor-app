@@ -9,7 +9,7 @@ body {
     rgba(186, 186, 186, 1) 50%,
     rgba(116, 121, 116, 1) 100%
   );
-  background-size: 100vh;
+  background-size: cover;
 }
 .full-screen {
   height: 100vh;
