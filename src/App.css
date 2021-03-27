@@ -15,46 +15,9 @@
   height: 35%;
   min-height: 200px;
 }
-.login form label {
-  margin-top: 2%;
-  margin-bottom: 1%;
-}
-.login form button {
-  margin: auto 0;
-}
 
-.campeonato {
-  padding: 2%;
-  padding-top: 4%;
-}
-.campeonato input {
-  margin-left: 2%;
-}
-.campeonato textarea {
-  height: 100px;
-}
-.search {
-  height: 20px;
-  border: 2px solid black;
-  border-radius: 5px;
-  margin: 2% 0;
-}
-.search img {
-  height: 15px;
-  margin-left: 2%;
-}
-.search input {
-  height: 20px;
-  width: 95%;
-  border-radius: 5px;
-}
-.search input:focus {
-  outline: none;
-}
-.date-championships {
-  border: 2px solid black;
-  border-radius: 5px;
-}
+/*//////////////////////////////////////*/
+
 .championship-card {
   display: flex;
   flex-wrap: wrap;
@@ -77,26 +40,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
   direction: ltr;
-}
-
-.game {
-  border: dotted 1px #a6acb1;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: rgba(150, 150, 150, 0.7) 10px 10px 15px;
-  margin: 3% 1%;
-  padding: 2%;
-}
-input:disabled {
-  background-color: #ffffff;
-}
-.error {
-  color: #ff0000;
-}
-.error-border {
-  border: #ff0000 solid 1px;
-}
-
-.background-gray {
-  background-color: rgba(216, 214, 214, 0.75);
 }

@@ -95,7 +95,7 @@ function Login(props) {
             value={formLogin.email}
             onChange={handleChange}
           />
-          <FormControl className="wid-65">
+          <FormControl className="wid-70">
             <InputLabel required={true}>Password</InputLabel>
             <Input
               id="standard-adornment-password"

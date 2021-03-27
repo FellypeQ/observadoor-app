@@ -14,24 +14,33 @@ const theme = createMuiTheme({
       dark: "#75a478",
       contrastText: "#212121",
     },
+    default: {
+      main: "#fff59d",
+      light: "#ffffcf",
+      dark: "#cbc26d",
+      contrastText: "#000000",
+    },
   },
   overrides: {
-    MuiInputLabel: {
-      root: {
-        color: "black",
-      },
-    },
-    MuiTextField: {
-      root: {
-        margin: "3%",
-      },
-    },
+    MuiInputLabel: { root: { color: "black" } },
+    //MuiTextField: { root: { margin: "3%" } },
     MuiButton: {
-      root: {
-        margin: "3%",
+      root: { margin: "3%" },
+      contained: {
+        backgroundColor: "#fff59d",
+        "&:hover": {
+          backgroundColor: "#cbc26d",
+        },
+      },
+      outlined: {
+        borderColor: "#cbc26d",
+        color: "#000000",
+        "&:hover": {
+          backgroundColor: "#ffffcf",
+        },
       },
     },
-    MuiFormControl: { root: { padding: "2% 4%" } },
+    MuiFormControl: { root: { margin: "min(1%)" } },
   },
 });
 

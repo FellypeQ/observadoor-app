@@ -1,5 +1,5 @@
-import { React, useState } from "react";
-import { LinearProgress, CircularProgress } from "@material-ui/core";
+import { React } from "react";
+import { TextField } from "@material-ui/core";
 
 function ChampionshipInfo(props) {
   function defineProgress(stage) {
@@ -15,83 +15,67 @@ function ChampionshipInfo(props) {
 
   return (
     <div>
-      {props.loading ? (
-        <CircularProgress />
-      ) : (
-        <input
+      <p className="disp-flex just-end mg-b-2">{props.nomeObsevador}</p>
+      <div>
+        <TextField
+          className="wid-90 "
           type="text"
-          className="text-30px wid-90 disp-flex just-center mg-b-2"
-          placeholder="Nome do Campeonato "
+          label="Nome do campeonato"
+          variant="outlined"
+          size="large"
           name="name"
           value={props.name}
           onChange={props.handleChange}
           disabled={props.disabled}
         />
-      )}
-      <div className="disp-flex just-end mg-b-2">
-        <h4>{props.nomeObsevador}</h4>
-      </div>
-      <div className="disp-flex flex-direct-col align-start">
-        <label className="wid-100 mg-b-2">
-          Local:
-          {props.loading ? (
-            <CircularProgress size={15} />
-          ) : (
-            <input
-              type="text"
-              placeholder="Local do jogo"
-              name="localization"
-              value={props.localization}
-              onChange={props.handleChange}
-              disabled={props.disabled}
-            />
-          )}
-        </label>
-        <label className="wid-100 mg-b-2">
-          Início da competição:
-          {props.loading ? (
-            <CircularProgress size={15} />
-          ) : (
-            <input
-              type="date"
-              name="competionDate"
-              value={props.competionDate}
-              onChange={props.handleChange}
-              disabled={props.disabled}
-            />
-          )}
-        </label>
-        <label className="wid-100 mg-b-2">
-          Categorias:
-          {props.loading ? (
-            <CircularProgress size={15} />
-          ) : (
-            <input
-              type="text"
-              placeholder="Categorias"
-              name="category"
-              value={props.category}
-              onChange={props.handleChange}
-              disabled={props.disabled}
-            />
-          )}
-        </label>
-        <label className="wid-100 mg-b-2">
-          Responsável:
-          {props.loading ? (
-            <CircularProgress size={15} />
-          ) : (
-            <input
-              className="wid-60"
-              type="text"
-              placeholder="Responsável pelo campeonato"
-              name="responsable"
-              value={props.responsable}
-              onChange={props.handleChange}
-              disabled={props.disabled}
-            />
-          )}
-        </label>
+        <TextField
+          variant="outlined"
+          type="text"
+          label="Local do jogo"
+          size="small"
+          margin="dense"
+          name="localization"
+          value={props.localization}
+          onChange={props.handleChange}
+          disabled={props.disabled}
+        />
+        <TextField
+          className="wid-75"
+          variant="outlined"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          label="Início da competição"
+          size="small"
+          margin="dense"
+          name="competionDate"
+          value={props.competionDate}
+          onChange={props.handleChange}
+          disabled={props.disabled}
+        />
+        <TextField
+          className="wid-75"
+          variant="outlined"
+          type="text"
+          label="Categorias"
+          size="small"
+          margin="dense"
+          name="category"
+          value={props.category}
+          onChange={props.handleChange}
+          disabled={props.disabled}
+        />
+        <TextField
+          className="wid-80"
+          variant="outlined"
+          type="text"
+          label="Responsável pelo campeonato"
+          size="small"
+          margin="dense"
+          name="responsable"
+          value={props.responsable}
+          onChange={props.handleChange}
+          disabled={props.disabled}
+        />
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  Button,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
@@ -71,11 +72,25 @@ function Campeonatos(props) {
           value={championships.search}
           onChange={handleSearch}
         />
-        <input type="date" className="date-championships" />
-        <Link to="/campeonatos/novo">
-          <button className="btn btn-black">Novo torneio </button>
+        <TextField
+          type="date"
+          variant="outlined"
+          size="small"
+          className="wid-50 text-14px"
+        />
+
+        <Link className="text-decore-none" to="/campeonatos/novo">
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            className="text-14px"
+          >
+            Novo torneio
+          </Button>
         </Link>
       </section>
+
       {loading.championshipList ? (
         <div className="disp-flex just-center ">
           <CircularProgress size={80} />
