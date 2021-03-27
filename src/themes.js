@@ -22,6 +22,7 @@ const theme = createMuiTheme({
     },
   },
   overrides: {
+    MuiBackdrop: { root: { zIndex: "999" } },
     MuiInputLabel: { root: { color: "black" } },
     //MuiTextField: { root: { margin: "3%" } },
     MuiButton: {
