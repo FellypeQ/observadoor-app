@@ -75,9 +75,9 @@ function ChampionshipInfo(props) {
       return (
         <div>
           <TextField
+            label="Nome do campeonato"
             className="wid-100"
             type="text"
-            label="Nome do campeonato"
             variant="outlined"
             size="large"
             InputProps={{ style: { fontWeight: "bolder" } }}
@@ -88,23 +88,23 @@ function ChampionshipInfo(props) {
             disabled={props.disabled}
           />
           <TextField
+            name="localization"
             variant="outlined"
             className="wid-45"
             type="text"
             label="Local do jogo"
             size="small"
             margin="dense"
-            name="localization"
             value={props.localization}
             onChange={props.handleChange}
             disabled={props.disabled}
           />
           <TextField
+            label="Início da competição"
             className="wid-50"
             variant="outlined"
             type="date"
             InputLabelProps={{ shrink: true }}
-            label="Início da competição"
             size="small"
             margin="dense"
             name="competionDate"
@@ -113,10 +113,10 @@ function ChampionshipInfo(props) {
             disabled={props.disabled}
           />
           <TextField
+            label="Categorias"
             className="wid-75"
             variant="outlined"
             type="text"
-            label="Categorias"
             size="small"
             margin="dense"
             name="category"
@@ -125,10 +125,10 @@ function ChampionshipInfo(props) {
             disabled={props.disabled}
           />
           <TextField
+            label="Responsável pelo campeonato"
             className="wid-80"
             variant="outlined"
             type="text"
-            label="Responsável pelo campeonato"
             size="small"
             margin="dense"
             name="responsable"

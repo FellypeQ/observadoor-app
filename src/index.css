@@ -16,6 +16,11 @@ body {
   padding: 2%;
 }
 
+.text-10px {
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: normal;
+}
 .text-14px {
   font-size: 14px;
   line-height: 21px;

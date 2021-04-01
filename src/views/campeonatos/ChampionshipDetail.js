@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SaveIcon from "@material-ui/icons/Save";
+import ReplyIcon from "@material-ui/icons/Reply";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 
@@ -199,7 +200,12 @@ function ChampionshipDetail(props) {
               </Button>
             </Link>
             <Link to="/campeonatos" className="text-decore-none">
-              <Button variant="contained" color="primary" size="small">
+              <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                startIcon={<ReplyIcon />}
+              >
                 Voltar
               </Button>
             </Link>
@@ -238,7 +244,12 @@ function ChampionshipDetail(props) {
             Adicionar Jogo
           </Button>
           <Link to="/campeonatos" className="text-decore-none">
-            <Button variant="contained" color="primary" size="small">
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              startIcon={<ReplyIcon />}
+            >
               Voltar
             </Button>
           </Link>

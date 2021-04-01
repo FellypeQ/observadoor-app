@@ -10,6 +10,7 @@ import {
   Button,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import CardCampeonato from "../../components/CardCampeonato";
 
@@ -57,9 +58,9 @@ function Campeonatos(props) {
       <h2>Torneios e competições</h2>
       <section className="disp-flex align-center flex-wrap just-sp-evenly">
         <TextField
+          label="Pesquisar o campeonato"
           variant="outlined"
           type="search"
-          label="Pesquisar o campeonato"
           size="small"
           InputProps={{
             startAdornment: (
@@ -73,20 +74,22 @@ function Campeonatos(props) {
           onChange={handleSearch}
         />
         <TextField
+          label="Data do campeonato"
+          InputLabelProps={{ shrink: true }}
           type="date"
           variant="outlined"
           size="small"
           className="wid-50 text-14px"
         />
 
-        <Link className="text-decore-none" to="/campeonatos/novo">
+        <Link className="wid-40 text-decore-none" to="/campeonatos/novo">
           <Button
             variant="contained"
+            color="secondary"
             size="small"
-            color="primary"
-            className="text-14px"
+            startIcon={<AddCircleOutlineIcon />}
           >
-            Novo torneio
+            Nova competição
           </Button>
         </Link>
       </section>
