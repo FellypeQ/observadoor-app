@@ -7,13 +7,24 @@ import {
   TextField,
   Button,
   Backdrop,
+  makeStyles,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SaveIcon from "@material-ui/icons/Save";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 
+const useStyles = makeStyles({
+  root: { margin: "1%" },
+  danger: {
+    backgroundColor: "#ef9a9a",
+    "&:hover": { backgroundColor: "#af4448" },
+  },
+});
+
 function ChampionshipDetail(props) {
+  const classes = useStyles();
+
   const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
   const [championship, setChampionship] = useState({
     name: "",
@@ -197,7 +208,7 @@ function ChampionshipDetail(props) {
             <Button
               variant="contained"
               color="secondary"
-              style={{ backgroundColor: "#ef9a9a" }}
+              className={classes.danger}
               size="small"
               startIcon={<DeleteIcon />}
               onClick={handleDelete}

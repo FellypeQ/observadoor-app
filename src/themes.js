@@ -24,7 +24,21 @@ const theme = createMuiTheme({
   overrides: {
     MuiBackdrop: { root: { zIndex: "999" } },
     MuiInputLabel: { root: { color: "black" } },
-    //MuiTextField: { root: { margin: "3%" } },
+    MuiCard: {
+      root: {
+        background:
+          "radial-gradient(circle, rgba(213,210,210,1) 0%, rgba(218,251,215,1) 50%, rgba(213,210,210,1) 100%)",
+        border: "1px groove",
+      },
+    },
+    MuiCardContent: {
+      root: {
+        padding: "5px",
+        "&:last-child": {
+          paddingBottom: "6px",
+        },
+      },
+    },
     MuiButton: {
       root: { margin: "3%" },
       contained: {
@@ -34,8 +48,9 @@ const theme = createMuiTheme({
         },
       },
       outlined: {
+        backgroundColor: "#bababa",
         borderColor: "#cbc26d",
-        color: "#000000",
+        color: "#424242",
         "&:hover": {
           backgroundColor: "#ffffcf",
         },

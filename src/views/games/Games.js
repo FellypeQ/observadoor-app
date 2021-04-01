@@ -2,11 +2,14 @@ import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import api from "../../autenntication/api";
 
+import { CircularProgress, Backdrop, Button } from "@material-ui/core";
+
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
 
 function Games(props) {
   const idChampionship = props.match.params.id;
+  const [loading, setLoading] = useState({ games: false });
 
   const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
   const [championship, setChampionship] = useState({
@@ -22,44 +25,44 @@ function Games(props) {
   const history = useHistory();
 
   useEffect(async () => {
+    setLoading({ ...loading, games: true });
     try {
-      const response = await api.get(
+      const respChampionship = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship({
-        id: response.data._id,
-        name: response.data.name,
-        localization: response.data.localization,
-        competionDate: response.data.competionDate
-          ? response.data.competionDate.split("T")[0]
+        id: respChampionship.data._id,
+        name: respChampionship.data.name,
+        localization: respChampionship.data.localization,
+        competionDate: respChampionship.data.competionDate
+          ? respChampionship.data.competionDate.split("T")[0]
           : "",
-        category: response.data.category,
-        responsable: response.data.responsable,
-        details: response.data.details,
+        category: respChampionship.data.category,
+        responsable: respChampionship.data.responsable,
+        details: respChampionship.data.details,
       });
-    } catch (error) {
-      console.error(error);
-    }
-    try {
-      const response = await api.get(
+      const respGame = await api.get(
         `${process.env.REACT_APP_API_BASE}games/${idChampionship}`
       );
-      setGames(response.data);
+      setGames(respGame.data);
+
+      setLoading({ ...loading, games: false });
     } catch (error) {
+      setLoading({ ...loading, games: false });
       console.error(error);
     }
   }, [props]);
 
-  const handleEdition = (event) => {
+  const handleEdition = (event, id) => {
     event.preventDefault();
-    const idGame = event.target.name;
+    const idGame = id;
 
     history.push(`/campeonatos/detalhes/${idChampionship}/jogos/${idGame}`);
   };
 
-  const handleLikeAthletic = (event) => {
+  const handleLikeAthletic = (event, id) => {
     event.preventDefault();
-    const idGame = event.target.name;
+    const idGame = id;
 
     history.push(
       `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/novo-atleta`
@@ -67,7 +70,10 @@ function Games(props) {
   };
 
   return (
-    <div>
+    <div className="full-screen">
+      <Backdrop open={loading.games}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <ChampionshipInfo
         name={championship.name}
         nomeObsevador={nomeObsevador.user.name}
@@ -99,15 +105,21 @@ function Games(props) {
       <section className="mg-t-5 disp-flex flex-wrap align-center just-sp-evenly">
         <Link
           to={`/campeonatos/detalhes/${idChampionship}/jogos/novo`}
-          className="btn btn-green text-14px mg-b-5 text-decore-none"
+          className="wid-40 text-decore-none"
         >
-          Adicionar outro Jogo
+          <Button
+            className="wid-95"
+            variant="contained"
+            color="default"
+            size="small"
+          >
+            Novo Jogo
+          </Button>
         </Link>
-        <Link
-          to={"/campeonatos"}
-          className="btn btn-red text-14px mg-b-5 text-decore-none"
-        >
-          Voltar para Campeonatos
+        <Link to={"/campeonatos"} className="text-decore-none">
+          <Button variant="outlined" color="primary" size="small">
+            Campeonatos
+          </Button>
         </Link>
       </section>
     </div>

@@ -1,82 +1,149 @@
 import { React } from "react";
-import { TextField } from "@material-ui/core";
+import { TextField, Card, CardContent } from "@material-ui/core";
 
 function ChampionshipInfo(props) {
-  function defineProgress(stage) {
-    if (stage === 1) {
-      return 33;
-    }
-    if (stage === 2) {
-      return 66;
+  function render(disabled) {
+    if (disabled === "disabled") {
+      return (
+        <Card>
+          <CardContent>
+            <TextField
+              label="Nome do campeonato"
+              type="text"
+              size="small"
+              margin="none"
+              InputProps={{
+                disableUnderline: true,
+                style: { fontSize: "1.5rem", height: "20px" },
+              }}
+              value={props.name}
+              disabled={props.disabled}
+            />
+            <TextField
+              label="Local do jogo"
+              className="wid-45"
+              type="text"
+              size="small"
+              InputProps={{
+                disableUnderline: true,
+                style: { fontSize: "1.0rem", height: "15px" },
+              }}
+              value={props.localization}
+              disabled={props.disabled}
+            />
+            <TextField
+              label="Início da competição"
+              className="wid-50"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              size="small"
+              InputProps={{
+                disableUnderline: true,
+                style: { fontSize: "1.0rem", height: "15px" },
+              }}
+              value={props.competionDate}
+              disabled={props.disabled}
+            />
+            <TextField
+              label="Categorias"
+              className="wid-45"
+              type="text"
+              size="small"
+              value={props.category}
+              InputProps={{
+                disableUnderline: true,
+                style: { fontSize: "1.0rem", height: "15px" },
+              }}
+              disabled={props.disabled}
+            />
+            <TextField
+              label="Responsável"
+              className="wid-50"
+              type="text"
+              size="small"
+              value={props.responsable}
+              InputProps={{
+                disableUnderline: true,
+                style: { fontSize: "1.0rem", height: "15px" },
+              }}
+              disabled={props.disabled}
+            />
+          </CardContent>
+        </Card>
+      );
     } else {
-      return 99;
+      return (
+        <div>
+          <TextField
+            className="wid-100"
+            type="text"
+            label="Nome do campeonato"
+            variant="outlined"
+            size="large"
+            InputProps={{ style: { fontWeight: "bolder" } }}
+            InputLabelProps={{ style: { fontWeight: "bold" } }}
+            name="name"
+            value={props.name}
+            onChange={props.handleChange}
+            disabled={props.disabled}
+          />
+          <TextField
+            variant="outlined"
+            className="wid-45"
+            type="text"
+            label="Local do jogo"
+            size="small"
+            margin="dense"
+            name="localization"
+            value={props.localization}
+            onChange={props.handleChange}
+            disabled={props.disabled}
+          />
+          <TextField
+            className="wid-50"
+            variant="outlined"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            label="Início da competição"
+            size="small"
+            margin="dense"
+            name="competionDate"
+            value={props.competionDate}
+            onChange={props.handleChange}
+            disabled={props.disabled}
+          />
+          <TextField
+            className="wid-75"
+            variant="outlined"
+            type="text"
+            label="Categorias"
+            size="small"
+            margin="dense"
+            name="category"
+            value={props.category}
+            onChange={props.handleChange}
+            disabled={props.disabled}
+          />
+          <TextField
+            className="wid-80"
+            variant="outlined"
+            type="text"
+            label="Responsável pelo campeonato"
+            size="small"
+            margin="dense"
+            name="responsable"
+            value={props.responsable}
+            onChange={props.handleChange}
+            disabled={props.disabled}
+          />
+        </div>
+      );
     }
   }
-
   return (
     <div>
       <p className="disp-flex just-end mg-b-2">{props.nomeObsevador}</p>
-      <div>
-        <TextField
-          className="wid-90 "
-          type="text"
-          label="Nome do campeonato"
-          variant="outlined"
-          size="large"
-          name="name"
-          value={props.name}
-          onChange={props.handleChange}
-          disabled={props.disabled}
-        />
-        <TextField
-          variant="outlined"
-          type="text"
-          label="Local do jogo"
-          size="small"
-          margin="dense"
-          name="localization"
-          value={props.localization}
-          onChange={props.handleChange}
-          disabled={props.disabled}
-        />
-        <TextField
-          className="wid-75"
-          variant="outlined"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          label="Início da competição"
-          size="small"
-          margin="dense"
-          name="competionDate"
-          value={props.competionDate}
-          onChange={props.handleChange}
-          disabled={props.disabled}
-        />
-        <TextField
-          className="wid-75"
-          variant="outlined"
-          type="text"
-          label="Categorias"
-          size="small"
-          margin="dense"
-          name="category"
-          value={props.category}
-          onChange={props.handleChange}
-          disabled={props.disabled}
-        />
-        <TextField
-          className="wid-80"
-          variant="outlined"
-          type="text"
-          label="Responsável pelo campeonato"
-          size="small"
-          margin="dense"
-          name="responsable"
-          value={props.responsable}
-          onChange={props.handleChange}
-          disabled={props.disabled}
-        />
-      </div>
+      {render(props.disabled)}
     </div>
   );
 }

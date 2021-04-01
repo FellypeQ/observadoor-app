@@ -2,10 +2,30 @@ import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import api from "../../autenntication/api";
 
+import {
+  CircularProgress,
+  Backdrop,
+  Button,
+  makeStyles,
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import SaveIcon from "@material-ui/icons/Save";
+import ReplyIcon from "@material-ui/icons/Reply";
+
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
 
+const useStyles = makeStyles({
+  root: { margin: "1%" },
+  danger: {
+    backgroundColor: "#ef9a9a",
+    "&:hover": { backgroundColor: "#af4448" },
+  },
+});
+
 function NewGame(props) {
+  const classes = useStyles();
+
   const idChampionship = props.match.params.id;
   const idGame = props.match.params.gameId;
 
@@ -27,48 +47,54 @@ function NewGame(props) {
     teamA: "",
     teamB: "",
   });
+  const [loading, setLoading] = useState({ game: false });
   const history = useHistory();
 
   useEffect(async () => {
+    setLoading({ ...loading, game: true });
     try {
-      const response = await api.get(
+      const respChampionship = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship({
-        name: response.data.name,
-        localization: response.data.localization,
-        competionDate: response.data.competionDate
-          ? response.data.competionDate.split("T")[0]
+        name: respChampionship.data.name,
+        localization: respChampionship.data.localization,
+        competionDate: respChampionship.data.competionDate
+          ? respChampionship.data.competionDate.split("T")[0]
           : "",
-        category: response.data.category,
-        responsable: response.data.responsable,
-        details: response.data.details,
+        category: respChampionship.data.category,
+        responsable: respChampionship.data.responsable,
+        details: respChampionship.data.details,
       });
       setGame({
         ...game,
-        idChampionship: response.data._id,
+        idChampionship: respChampionship.data._id,
       });
     } catch (error) {
-      console.error(error);
+      console.error("respChampionship", error);
     }
 
     if (idGame) {
       try {
-        const response = await api.get(
+        const respGame = await api.get(
           `${process.env.REACT_APP_API_BASE}game/${idGame}`
         );
         setGame({
-          _id: response.data._id,
-          idChampionship: response.data.idChampionship,
-          gameName: response.data.gameName,
-          dateGame: response.data.dateGame.replace("Z", ""),
-          category: response.data.category,
-          teamA: response.data.teamA,
-          teamB: response.data.teamB,
+          _id: respGame.data._id,
+          idChampionship: respGame.data.idChampionship,
+          gameName: respGame.data.gameName,
+          dateGame: respGame.data.dateGame.replace("Z", ""),
+          category: respGame.data.category,
+          teamA: respGame.data.teamA,
+          teamB: respGame.data.teamB,
         });
+        setLoading({ ...loading, game: false });
       } catch (error) {
-        console.log(error);
+        setLoading({ ...loading, game: false });
+        console.error("respGame", error);
       }
+    } else {
+      setLoading({ ...loading, game: false });
     }
   }, []);
 
@@ -81,6 +107,7 @@ function NewGame(props) {
 
   const handleSave = async (event) => {
     event.preventDefault();
+    setLoading({ ...loading, game: true });
 
     if (idGame) {
       try {
@@ -103,12 +130,13 @@ function NewGame(props) {
     }
   };
 
-  const handleLikeAthletic = async (event) => {
+  const handleLikeAthletic = async (event, id) => {
     event.preventDefault();
+    setLoading({ ...loading, game: true });
 
     if (idGame) {
       try {
-        const response = await api.patch(
+        const respUpdateGame = await api.patch(
           `${process.env.REACT_APP_API_BASE}game/${game._id}`,
           game
         );
@@ -116,27 +144,34 @@ function NewGame(props) {
           `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/novo-atleta`
         );
       } catch (error) {
-        console.error(error);
+        setLoading({ ...loading, game: false });
+        console.error("respUpdateGame", error);
       }
     } else {
       const { _id, ...NewGame } = game;
 
-      const response = await api.post(
-        `${process.env.REACT_APP_API_BASE}game`,
-        NewGame
-      );
-      history.push(
-        `/campeonatos/detalhes/${idChampionship}/jogos/${response.data.result._id}/novo-atleta`
-      );
+      try {
+        const respNewGame = await api.post(
+          `${process.env.REACT_APP_API_BASE}game`,
+          NewGame
+        );
+        history.push(
+          `/campeonatos/detalhes/${idChampionship}/jogos/${respNewGame.data.result._id}/novo-atleta`
+        );
+      } catch (error) {
+        setLoading({ ...loading, game: false });
+        console.error("respNewGame", error);
+      }
     }
   };
 
-  const handleOtherAthletic = async (event) => {
+  const handleOtherGame = async (event) => {
     event.preventDefault();
+    setLoading({ ...loading, game: true });
 
     if (idGame) {
       try {
-        const response = await api.patch(
+        const respUpdateGame = await api.patch(
           `${process.env.REACT_APP_API_BASE}game/${game._id}`,
           game
         );
@@ -151,43 +186,54 @@ function NewGame(props) {
           teamB: "",
         });
       } catch (error) {
-        console.error(error);
+        setLoading({ ...loading, game: false });
+        console.error("respUpadateGame", error);
       }
     } else {
       const { _id, ...NewGame } = game;
 
-      const response = await api.post(
-        `${process.env.REACT_APP_API_BASE}game`,
-        NewGame
-      );
-      history.push(`/campeonatos/detalhes/${idChampionship}/jogos/novo`);
-      setGame({
-        _id: "",
-        idChampionship: "",
-        gameName: "",
-        dateGame: "",
-        category: "",
-        teamA: "",
-        teamB: "",
-      });
+      try {
+        const respNewGame = await api.post(
+          `${process.env.REACT_APP_API_BASE}game`,
+          NewGame
+        );
+        history.push(`/campeonatos/detalhes/${idChampionship}/jogos/novo`);
+        setGame({
+          _id: "",
+          idChampionship: "",
+          gameName: "",
+          dateGame: "",
+          category: "",
+          teamA: "",
+          teamB: "",
+        });
+      } catch (error) {
+        setLoading({ ...loading, game: false });
+        console.error("respNewGame", error);
+      }
     }
   };
 
   const handleDelete = async (event) => {
     event.preventDefault();
+    setLoading({ ...loading, game: true });
 
     try {
-      const response = await api.delete(
+      const respDeleteGame = await api.delete(
         `${process.env.REACT_APP_API_BASE}game/${idGame}`
       );
       history.push(`/campeonatos/detalhes/${idChampionship}/jogos`);
     } catch (error) {
-      console.error(error);
+      setLoading({ ...loading, game: false });
+      console.error("respDeleteGame", error);
     }
   };
 
   return (
-    <div className="campeonato ">
+    <div className="full-screen">
+      <Backdrop open={loading.game}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <ChampionshipInfo
         name={championship.name}
         nomeObsevador={nomeObsevador}
@@ -215,30 +261,55 @@ function NewGame(props) {
         />
       </section>
       <section className="mg-t-5 disp-flex flex-wrap align-center just-sp-evenly">
-        <button className="btn btn-black text-14px mg-b-5" onClick={handleSave}>
-          Salvar
-        </button>
-        <Link
-          to={`/campeonatos/detalhes/${idChampionship}/jogos`}
-          className="btn btn-blue text-14px mg-b-5 text-decore-none"
+        <Button
+          className={classes.root}
+          variant="contained"
+          color="secondary"
+          size="small"
+          onClick={handleSave}
+          startIcon={<SaveIcon />}
         >
-          Jogos Realizados
-        </Link>
-        <button
-          className="btn btn-green text-14px mg-b-5"
-          onClick={handleOtherAthletic}
+          Salvar
+        </Button>
+        <Button
+          className={classes.root}
+          variant="contained"
+          size="small"
+          onClick={handleOtherGame}
         >
           Adicionar outro Jogo
-        </button>
+        </Button>
         <Link
-          to={"/campeonatos"}
-          className="btn btn-red text-14px mg-b-5 text-decore-none"
+          to={`/campeonatos/detalhes/${idChampionship}/jogos`}
+          className="text-decore-none wid-60"
         >
-          Cancelar
+          <Button
+            className={`${classes.root} wid-95`}
+            variant="contained"
+            color="primary"
+            size="small"
+          >
+            Jogos Realizados
+          </Button>
         </Link>
-        <button className="btn btn-red text-14px mg-b-5" onClick={handleDelete}>
-          Excluir jogo
-        </button>
+        <Link to={"/campeonatos"} className="text-decore-none">
+          <Button
+            className={classes.root}
+            variant="outlined"
+            color=""
+            size="small"
+            startIcon={<ReplyIcon />}
+          >
+            Campeonatos
+          </Button>
+        </Link>
+        <Button
+          startIcon={<DeleteIcon />}
+          className={`${classes.danger} ${classes.root}`}
+          onClick={handleDelete}
+        >
+          Excluir
+        </Button>
       </section>
     </div>
   );

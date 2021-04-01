@@ -135,6 +135,9 @@ body {
 .wid-40 {
   width: 40%;
 }
+.wid-35 {
+  width: 35%;
+}
 .wid-30 {
   width: 30%;
 }
@@ -176,6 +179,10 @@ body {
   margin-top: 1%;
   margin-bottom: 1%;
 }
+.mg-y-0 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
 .mg-x-2 {
   margin-left: 2%;
   margin-right: 2%;
@@ -193,9 +200,6 @@ body {
 .text-white {
   color: #ffffff;
 }
-input:disabled {
-  /*background-color: transparent;*/
-}
 .error {
   color: #ff0000;
 }
@@ -205,4 +209,8 @@ input:disabled {
 
 .background-gray {
   background-color: rgba(216, 214, 214, 0.75);
+}
+
+.input-smaller {
+  height: 35px;
 }
