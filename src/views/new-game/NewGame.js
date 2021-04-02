@@ -11,6 +11,8 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import SaveIcon from "@material-ui/icons/Save";
 import ReplyIcon from "@material-ui/icons/Reply";
+import ReplyAllIcon from "@material-ui/icons/ReplyAll";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
@@ -276,29 +278,31 @@ function NewGame(props) {
           variant="contained"
           size="small"
           onClick={handleOtherGame}
+          startIcon={<AddCircleOutlineIcon />}
         >
           Adicionar outro Jogo
         </Button>
         <Link
           to={`/campeonatos/detalhes/${idChampionship}/jogos`}
-          className="text-decore-none wid-60"
+          className="text-decore-none wid-30"
         >
           <Button
             className={`${classes.root} wid-95`}
-            variant="contained"
+            variant="outlined"
             color="primary"
             size="small"
+            startIcon={<ReplyIcon />}
           >
-            Jogos Realizados
+            Jogos
           </Button>
         </Link>
         <Link to={"/campeonatos"} className="text-decore-none">
           <Button
             className={classes.root}
             variant="outlined"
-            color=""
+            color="primary"
             size="small"
-            startIcon={<ReplyIcon />}
+            startIcon={<ReplyAllIcon />}
           >
             Campeonatos
           </Button>
@@ -306,6 +310,7 @@ function NewGame(props) {
         <Button
           startIcon={<DeleteIcon />}
           className={`${classes.danger} ${classes.root}`}
+          size="small"
           onClick={handleDelete}
         >
           Excluir

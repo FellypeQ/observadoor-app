@@ -43,3 +43,20 @@
 }
 
 /*/ /////////////////////////////////////*/
+
+.input-game-card label {
+  font-size: 13px;
+}
+.input-game-card > div {
+  margin-top: 11px !important;
+}
+.input-game-card input {
+  padding: 1px 0;
+  font-size: 13px;
+}
+.input-center input {
+  text-align: center;
+}
+.input-center label {
+  margin-left: 10%;
+}

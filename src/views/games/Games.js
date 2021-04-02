@@ -3,6 +3,8 @@ import { Link, useHistory } from "react-router-dom";
 import api from "../../autenntication/api";
 
 import { CircularProgress, Backdrop, Button } from "@material-ui/core";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import ReplyIcon from "@material-ui/icons/Reply";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
@@ -112,12 +114,18 @@ function Games(props) {
             variant="contained"
             color="default"
             size="small"
+            startIcon={<AddCircleOutlineIcon />}
           >
             Novo Jogo
           </Button>
         </Link>
         <Link to={"/campeonatos"} className="text-decore-none">
-          <Button variant="outlined" color="primary" size="small">
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            startIcon={<ReplyIcon />}
+          >
             Campeonatos
           </Button>
         </Link>

@@ -14,7 +14,7 @@ const theme = createMuiTheme({
       dark: "#75a478",
       contrastText: "#212121",
     },
-    default: {
+    inherit: {
       main: "#fff59d",
       light: "#ffffcf",
       dark: "#cbc26d",

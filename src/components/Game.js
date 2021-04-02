@@ -10,9 +10,21 @@ import {
   CardContent,
   makeStyles,
 } from "@material-ui/core";
+import SendIcon from "@material-ui/icons/Send";
+import RedoIcon from "@material-ui/icons/Redo";
 
 const useStyles = makeStyles({
-  root: { margin: "1%" },
+  root: {
+    margin: "1% auto",
+  },
+  button: {
+    height: "24px",
+    width: "110px",
+    fontSize: "8px",
+  },
+  text: {
+    fontSize: "8px",
+  },
 });
 
 function Game(props) {
@@ -35,26 +47,43 @@ function Game(props) {
   ];
   const classes = useStyles();
 
+  function transformDate(date) {
+    const dateTime = date.split("T");
+
+    const date2 = dateTime[0].split("-");
+    const time2 = dateTime[1].split(":");
+
+    return `${date2[2]}/${date2[1]} ${time2[0]}:${time2[1]}`;
+  }
+
   function render(disable) {
     if (disable === "disabled") {
       return (
         <Card>
-          <CardContent>
+          <CardContent
+            onClick={(event) => {
+              props.handleEdition(event, props.idGame);
+            }}
+          >
             <TextField
-              label="Nome do jogo"
-              className="wid-45"
+              label="Nome"
+              className="input-game-card wid-25"
               type="text"
               InputProps={{
                 disableUnderline: true,
-                style: { fontSize: "1.0rem", height: "17px" },
+                style: {
+                  fontSize: "1rem",
+                  paddingBottom: "1px",
+                  height: "17px",
+                },
               }}
               size="small"
               value={props.gameName}
               disabled={props.disabled}
             />
             <TextField
-              label="Categoria selecionada"
-              className="wid-50"
+              label="Categoria"
+              className="input-game-card wid-40"
               InputProps={{
                 disableUnderline: true,
                 style: { fontSize: "1.0rem", height: "17px" },
@@ -64,20 +93,21 @@ function Game(props) {
               disabled={props.disabled}
             />
             <TextField
-              label="Data e hora da jogo"
-              type="datetime-local"
+              label="Data e hora"
+              className="input-game-card wid-25"
               InputLabelProps={{ shrink: true }}
               InputProps={{
                 disableUnderline: true,
                 style: { fontSize: "1.0rem", height: "17px" },
               }}
               size="small"
-              value={props.dateGame}
+              value={transformDate(props.dateGame)}
               disabled={props.disabled}
             />
             <section className="disp-flex just-sp-between align-center">
               <TextField
                 label="Equipe A"
+                className="input-game-card input-center"
                 type="text"
                 InputProps={{
                   disableUnderline: true,
@@ -87,9 +117,10 @@ function Game(props) {
                 value={props.teamA}
                 disabled={props.disabled}
               />
-              <p className="mg-x-2">X</p>
+              X
               <TextField
-                label="Equipe A"
+                label="Equipe B"
+                className="input-game-card input-center"
                 type="text"
                 InputProps={{
                   disableUnderline: true,
@@ -103,51 +134,36 @@ function Game(props) {
                 disabled={props.disabled}
               />
             </section>
-            {props.edition ? (
-              <div className="disp-flex just-center">
-                <Button
-                  className={classes.root}
-                  variant="outlined"
-                  size="small"
-                  name={props.idGame}
-                  onClick={(event) => {
-                    props.handleEdition(event, props.idGame);
-                  }}
-                >
-                  Editar a partida
-                </Button>
-              </div>
-            ) : (
-              <></>
-            )}
-            <div className="disp-flex just-sp-evenly align-center">
+            <div className="disp-flex align-center just-sp-evenly">
               {props.noButton ? (
                 <></>
               ) : (
                 <Button
-                  className={classes.root}
+                  className={`${classes.root} ${classes.button} wid-45`}
                   variant="contained"
                   color="secondary"
                   size="small"
                   onClick={(event) => {
                     props.handleLikeAthletic(event, props.idGame);
                   }}
+                  startIcon={<SendIcon />}
                 >
-                  Gostei do atleta
+                  Novo Atleta
                 </Button>
               )}
               {props.edition ? (
                 <Link
-                  className="text-decore-none wid-50"
+                  className="text-decore-none wid-45"
                   to={`/campeonatos/detalhes/${props.idChanpionship}/jogos/${props.idGame}/athlets`}
                 >
                   <Button
-                    className={`${classes.root} wid-100`}
+                    className={`${classes.root} ${classes.button} wid-100`}
                     size="small"
                     variant="contained"
                     color="primary"
+                    startIcon={<RedoIcon />}
                   >
-                    Atletas marcados
+                    Atletas
                   </Button>
                 </Link>
               ) : (
@@ -221,7 +237,7 @@ function Game(props) {
             />
             <p className="mg-x-2">X</p>
             <TextField
-              label="Equipe A"
+              label="Equipe B"
               type="text"
               InputProps={{ className: "input-smaller" }}
               variant="outlined"
@@ -245,6 +261,7 @@ function Game(props) {
                 onClick={(event) => {
                   props.handleLikeAthletic(event, props.idGame);
                 }}
+                startIcon={<SendIcon />}
               >
                 Gostei do atleta
               </Button>

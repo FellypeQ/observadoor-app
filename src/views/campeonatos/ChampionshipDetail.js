@@ -12,6 +12,8 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import SaveIcon from "@material-ui/icons/Save";
 import ReplyIcon from "@material-ui/icons/Reply";
+import SendIcon from "@material-ui/icons/Send";
+import RedoIcon from "@material-ui/icons/Redo";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 
@@ -182,7 +184,7 @@ function ChampionshipDetail(props) {
               color="default"
               onClick={handleAddGame}
               size="small"
-              startIcon={<SaveIcon />}
+              startIcon={<SendIcon />}
             >
               Adicionar Jogo
             </Button>
@@ -195,6 +197,7 @@ function ChampionshipDetail(props) {
                 variant="contained"
                 color="primary"
                 size="small"
+                startIcon={<RedoIcon />}
               >
                 Jogos Realizados
               </Button>
@@ -239,7 +242,7 @@ function ChampionshipDetail(props) {
             color="default"
             onClick={handleAddGame}
             size="small"
-            startIcon={<SaveIcon />}
+            startIcon={<SendIcon />}
           >
             Adicionar Jogo
           </Button>
