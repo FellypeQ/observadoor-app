@@ -111,12 +111,13 @@ function AthleticList(props) {
       ))}
       <Link
         to={`/campeonatos/detalhes/${idChampionship}/jogos`}
-        className="text-decore-none"
+        className="text-decore-none disp-flex just-center"
       >
         <Button
           className=""
           variant="outlined"
           color="primary"
+          size="small"
           startIcon={<ReplyIcon />}
         >
           Voltar
