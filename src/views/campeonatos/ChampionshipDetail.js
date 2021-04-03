@@ -16,6 +16,7 @@ import SendIcon from "@material-ui/icons/Send";
 import RedoIcon from "@material-ui/icons/Redo";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
+import Navbar from "../../components/Navbar";
 
 const useStyles = makeStyles({
   root: { margin: "1%" },
@@ -145,6 +146,7 @@ function ChampionshipDetail(props) {
         <CircularProgress color="inherit" />
       </Backdrop>
 
+      <Navbar />
       <ChampionshipInfo
         name={championship.name}
         nomeObsevador={nomeObsevador.user.name}
@@ -202,16 +204,6 @@ function ChampionshipDetail(props) {
                 Jogos Realizados
               </Button>
             </Link>
-            <Link to="/campeonatos" className="text-decore-none">
-              <Button
-                variant="outlined"
-                color="primary"
-                size="small"
-                startIcon={<ReplyIcon />}
-              >
-                Voltar
-              </Button>
-            </Link>
           </div>
           <div className="disp-flex just-center">
             <Button
@@ -246,16 +238,6 @@ function ChampionshipDetail(props) {
           >
             Adicionar Jogo
           </Button>
-          <Link to="/campeonatos" className="text-decore-none">
-            <Button
-              variant="outlined"
-              color="primary"
-              size="small"
-              startIcon={<ReplyIcon />}
-            >
-              Voltar
-            </Button>
-          </Link>
         </div>
       )}
     </form>

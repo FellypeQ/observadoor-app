@@ -6,12 +6,13 @@ import {
   CircularProgress,
   TextField,
   InputAdornment,
-  IconButton,
+  Typography,
   Button,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
+import Navbar from "../../components/Navbar";
 import CardCampeonato from "../../components/CardCampeonato";
 
 function Campeonatos(props) {
@@ -55,8 +56,9 @@ function Campeonatos(props) {
 
   return (
     <div className="full-screen campeonato">
-      <h2>Torneios e competições</h2>
-      <section className="disp-flex align-center flex-wrap just-sp-evenly">
+      <Navbar stage="championship" />
+      <Typography variant="h5">Torneios e competições</Typography>
+      <section className="mg-y-2 disp-flex align-center flex-wrap just-sp-evenly">
         <TextField
           label="Pesquisar o campeonato"
           variant="outlined"

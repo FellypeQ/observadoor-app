@@ -140,12 +140,7 @@ function ChampionshipInfo(props) {
       );
     }
   }
-  return (
-    <div>
-      <p className="disp-flex just-end mg-b-2">{props.nomeObsevador}</p>
-      {render(props.disabled)}
-    </div>
-  );
+  return <div className="mg-y-2">{render(props.disabled)}</div>;
 }
 
 export default ChampionshipInfo;

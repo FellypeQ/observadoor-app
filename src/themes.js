@@ -22,6 +22,9 @@ const theme = createMuiTheme({
     },
   },
   overrides: {
+    MuiAppBar: { root: { height: "40px" } },
+    MuiToolbar: { regular: { minHeight: "40px" } },
+    MuiDrawer: { paper: { backgroundColor: "#6d6d6d" } },
     MuiBackdrop: { root: { zIndex: "999" } },
     MuiInputLabel: { root: { color: "black" } },
     MuiCard: {
