@@ -190,6 +190,17 @@ function ChampionshipDetail(props) {
             >
               Adicionar Jogo
             </Button>
+            <Link to={`/campeonatos`} className="text-decore-none">
+              <Button
+                className="wid-95"
+                variant="outlined"
+                color="primary"
+                size="small"
+                startIcon={<ReplyIcon />}
+              >
+                Voltar
+              </Button>
+            </Link>
             <Link
               to={`/campeonatos/detalhes/${idChampionship}/jogos`}
               className="text-decore-none"
@@ -238,6 +249,17 @@ function ChampionshipDetail(props) {
           >
             Adicionar Jogo
           </Button>
+          <Link to={`/campeonatos`} className="text-decore-none">
+            <Button
+              className="wid-95"
+              variant="outlined"
+              color="primary"
+              size="small"
+              startIcon={<ReplyIcon />}
+            >
+              Voltar
+            </Button>
+          </Link>
         </div>
       )}
     </form>

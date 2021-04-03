@@ -7,6 +7,8 @@ import {
   Button,
   Divider,
   Card,
+  CardActionArea,
+  CardActions,
   CardContent,
   makeStyles,
 } from "@material-ui/core";
@@ -48,6 +50,10 @@ function Game(props) {
   const classes = useStyles();
 
   function transformDate(date) {
+    if (date === "") {
+      console.log(date);
+      return;
+    }
     const dateTime = date.split("T");
 
     const date2 = dateTime[0].split("-");
@@ -60,117 +66,121 @@ function Game(props) {
     if (disable === "disabled") {
       return (
         <Card>
-          <CardContent
+          <CardActionArea
             onClick={(event) => {
-              props.handleEdition(event, props.idGame);
+              if (props.idGame) {
+                props.handleEdition(event, props.idGame);
+              }
             }}
           >
-            <TextField
-              label="Nome"
-              className="input-game-card wid-25"
-              type="text"
-              InputProps={{
-                disableUnderline: true,
-                style: {
-                  fontSize: "1rem",
-                  paddingBottom: "1px",
-                  height: "17px",
-                },
-              }}
-              size="small"
-              value={props.gameName}
-              disabled={props.disabled}
-            />
-            <TextField
-              label="Categoria"
-              className="input-game-card wid-40"
-              InputProps={{
-                disableUnderline: true,
-                style: { fontSize: "1.0rem", height: "17px" },
-              }}
-              size="small"
-              value={props.category}
-              disabled={props.disabled}
-            />
-            <TextField
-              label="Data e hora"
-              className="input-game-card wid-25"
-              InputLabelProps={{ shrink: true }}
-              InputProps={{
-                disableUnderline: true,
-                style: { fontSize: "1.0rem", height: "17px" },
-              }}
-              size="small"
-              value={transformDate(props.dateGame)}
-              disabled={props.disabled}
-            />
-            <section className="disp-flex just-sp-between align-center">
+            <CardContent>
               <TextField
-                label="Equipe A"
-                className="input-game-card input-center"
+                label="Nome"
+                className="input-game-card wid-25"
                 type="text"
+                InputProps={{
+                  disableUnderline: true,
+                  style: {
+                    fontSize: "1rem",
+                    paddingBottom: "1px",
+                    height: "17px",
+                  },
+                }}
+                size="small"
+                value={props.gameName}
+                disabled={props.disabled}
+              />
+              <TextField
+                label="Categoria"
+                className="input-game-card wid-40"
                 InputProps={{
                   disableUnderline: true,
                   style: { fontSize: "1.0rem", height: "17px" },
                 }}
                 size="small"
-                value={props.teamA}
+                value={props.category}
                 disabled={props.disabled}
               />
-              X
               <TextField
-                label="Equipe B"
-                className="input-game-card input-center"
-                type="text"
+                label="Data e hora"
+                className="input-game-card wid-25"
+                InputLabelProps={{ shrink: true }}
                 InputProps={{
                   disableUnderline: true,
-                  style: {
-                    fontSize: "1.0rem",
-                    height: "17px",
-                  },
+                  style: { fontSize: "1.0rem", height: "17px" },
                 }}
                 size="small"
-                value={props.teamB}
+                value={transformDate(props.dateGame)}
                 disabled={props.disabled}
               />
-            </section>
-            <div className="disp-flex align-center just-sp-evenly">
-              {props.noButton ? (
-                <></>
-              ) : (
-                <Button
-                  className={`${classes.root} ${classes.button} wid-45`}
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  onClick={(event) => {
-                    props.handleLikeAthletic(event, props.idGame);
+              <section className="disp-flex just-sp-between align-center">
+                <TextField
+                  label="Equipe A"
+                  className="input-game-card input-center"
+                  type="text"
+                  InputProps={{
+                    disableUnderline: true,
+                    style: { fontSize: "1.0rem", height: "17px" },
                   }}
-                  startIcon={<SendIcon />}
+                  size="small"
+                  value={props.teamA}
+                  disabled={props.disabled}
+                />
+                X
+                <TextField
+                  label="Equipe B"
+                  className="input-game-card input-center"
+                  type="text"
+                  InputProps={{
+                    disableUnderline: true,
+                    style: {
+                      fontSize: "1.0rem",
+                      height: "17px",
+                    },
+                  }}
+                  size="small"
+                  value={props.teamB}
+                  disabled={props.disabled}
+                />
+              </section>
+            </CardContent>
+          </CardActionArea>
+          <CardActions className="disp-flex align-center just-sp-evenly">
+            {props.noButton ? (
+              <></>
+            ) : (
+              <Button
+                className={`${classes.root} ${classes.button} wid-45`}
+                variant="contained"
+                color="secondary"
+                size="small"
+                onClick={(event) => {
+                  props.handleLikeAthletic(event, props.idGame);
+                }}
+                startIcon={<SendIcon />}
+              >
+                Novo Atleta
+              </Button>
+            )}
+            {props.edition ? (
+              <Link
+                className="text-decore-none wid-45"
+                to={`/campeonatos/detalhes/${props.idChanpionship}/jogos/${props.idGame}/athlets`}
+              >
+                <Button
+                  className={`${classes.root} ${classes.button} wid-100`}
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  startIcon={<RedoIcon />}
                 >
-                  Novo Atleta
+                  Atletas
                 </Button>
-              )}
-              {props.edition ? (
-                <Link
-                  className="text-decore-none wid-45"
-                  to={`/campeonatos/detalhes/${props.idChanpionship}/jogos/${props.idGame}/athlets`}
-                >
-                  <Button
-                    className={`${classes.root} ${classes.button} wid-100`}
-                    size="small"
-                    variant="contained"
-                    color="primary"
-                    startIcon={<RedoIcon />}
-                  >
-                    Atletas
-                  </Button>
-                </Link>
-              ) : (
-                <></>
-              )}
-            </div>
-          </CardContent>
+              </Link>
+            ) : (
+              <></>
+            )}
+          </CardActions>
         </Card>
       );
     } else {

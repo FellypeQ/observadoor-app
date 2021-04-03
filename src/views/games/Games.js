@@ -2,12 +2,14 @@ import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import api from "../../autenntication/api";
 
-import { CircularProgress, Backdrop, Button } from "@material-ui/core";
+import { CircularProgress, Backdrop, Button, Fab } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ReplyIcon from "@material-ui/icons/Reply";
+import AddIcon from "@material-ui/icons/Add";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
+import Navbar from "../../components/Navbar";
 
 function Games(props) {
   const idChampionship = props.match.params.id;
@@ -71,11 +73,14 @@ function Games(props) {
     );
   };
 
+  const { id, gameId, athleteId } = props.match.params;
+
   return (
     <div className="full-screen">
       <Backdrop open={loading.games}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Navbar championship={id} game={gameId} athlete={athleteId} />
       <ChampionshipInfo
         name={championship.name}
         nomeObsevador={nomeObsevador.user.name}
@@ -104,32 +109,14 @@ function Games(props) {
           />
         ))}
       </section>
-      <section className="mg-t-5 disp-flex flex-wrap align-center just-sp-evenly">
-        <Link
-          to={`/campeonatos/detalhes/${idChampionship}/jogos/novo`}
-          className="wid-40 text-decore-none"
-        >
-          <Button
-            className="wid-95"
-            variant="contained"
-            color="default"
-            size="small"
-            startIcon={<AddCircleOutlineIcon />}
-          >
-            Novo Jogo
-          </Button>
-        </Link>
-        <Link to={"/campeonatos"} className="text-decore-none">
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            startIcon={<ReplyIcon />}
-          >
-            Campeonatos
-          </Button>
-        </Link>
-      </section>
+      <Link
+        className="wid-40 text-decore-none"
+        to={`/campeonatos/detalhes/${idChampionship}/jogos/novo`}
+      >
+        <Fab color="primary" aria-label="Adicionar Campeonato" size="small">
+          <AddIcon />
+        </Fab>
+      </Link>
     </div>
   );
 }

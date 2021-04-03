@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { Link as RouterLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
   AppBar,
@@ -12,7 +12,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Link,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -22,13 +21,16 @@ function Navbar(props) {
   const history = useHistory();
   const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
   const [drawer, setDrawer] = useState(false);
-  const [disabled, setDisabled] = useState({ games: true, athletes: true });
+  const [ids, setIds] = useState({
+    championship: "",
+    games: "",
+    athletes: "",
+  });
 
   useEffect(() => {
-    const stage = props.stage;
-    if (stage === "championship") {
-      setDisabled({ games: true, athletes: true });
-    }
+    const { championship, game, athlete } = props;
+
+    setIds({ championship: championship, games: game, athletes: athlete });
   }, [props]);
 
   const handleLogout = () => {
@@ -74,19 +76,27 @@ function Navbar(props) {
             </ListItemIcon>
             <ListItemText primary={"Sair"} />
           </ListItem>
-          <Link>
-            <RouterLink
-              to="/campeonatos"
+          <Link to="/campeonatos" className="text-decore-none text-white">
+            <ListItem>
+              <ListItemIcon className="text-white">
+                <SportsSoccerIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Campeonatos"} />
+            </ListItem>
+          </Link>
+          {ids.championship !== "" && ids.championship !== undefined && (
+            <Link
+              to={`/campeonatos/detalhes/${ids.championship}/jogos`}
               className="text-decore-none text-white"
             >
               <ListItem>
                 <ListItemIcon className="text-white">
                   <SportsSoccerIcon />
                 </ListItemIcon>
-                <ListItemText primary={"Campeonatos"} />
+                <ListItemText primary={"Jogos"} />
               </ListItem>
-            </RouterLink>
-          </Link>
+            </Link>
+          )}
         </List>
       </Drawer>
     </AppBar>

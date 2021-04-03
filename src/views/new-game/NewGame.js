@@ -16,6 +16,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import ChampionshipInfo from "../../components/ChampionshipInfo";
 import Game from "../../components/Game";
+import Navbar from "../../components/Navbar";
 
 const useStyles = makeStyles({
   root: { margin: "1%" },
@@ -231,11 +232,14 @@ function NewGame(props) {
     }
   };
 
+  const { id, gameId, athleteId } = props.match.params;
+
   return (
     <div className="full-screen">
       <Backdrop open={loading.game}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Navbar championship={id} game={gameId} athlete={athleteId} />
       <ChampionshipInfo
         name={championship.name}
         nomeObsevador={nomeObsevador}
@@ -293,28 +297,19 @@ function NewGame(props) {
             size="small"
             startIcon={<ReplyIcon />}
           >
-            Jogos
+            Voltar
           </Button>
         </Link>
-        <Link to={"/campeonatos"} className="text-decore-none">
+        {idGame && (
           <Button
-            className={classes.root}
-            variant="outlined"
-            color="primary"
+            startIcon={<DeleteIcon />}
+            className={`${classes.danger} ${classes.root}`}
             size="small"
-            startIcon={<ReplyAllIcon />}
+            onClick={handleDelete}
           >
-            Campeonatos
+            Excluir
           </Button>
-        </Link>
-        <Button
-          startIcon={<DeleteIcon />}
-          className={`${classes.danger} ${classes.root}`}
-          size="small"
-          onClick={handleDelete}
-        >
-          Excluir
-        </Button>
+        )}
       </section>
     </div>
   );
