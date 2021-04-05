@@ -61,6 +61,20 @@ const theme = createMuiTheme({
       },
     },
     MuiFormControl: { root: { margin: "min(1%)" } },
+    MuiSlider: {
+      root: {
+        width: "80%",
+        marginLeft: "5%",
+        marginBottom: "0 !important",
+        paddingTop: "3% !important",
+        //paddingBottom: "3% !important",
+      },
+      markLabel: {
+        top: "55% !important",
+        transform: "translateX(-50%)",
+        fontSize: "0.6rem",
+      },
+    },
   },
 });
 

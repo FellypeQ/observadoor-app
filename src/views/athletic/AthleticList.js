@@ -2,16 +2,25 @@ import { React, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import api from "../../autenntication/api";
 
-import { TextField, Fab, Button } from "@material-ui/core";
+import {
+  TextField,
+  Fab,
+  Button,
+  Backdrop,
+  CircularProgress,
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import ReplyIcon from "@material-ui/icons/Reply";
 
 import Game from "../../components/Game";
 import Navbar from "../../components/Navbar";
+import CardAthlete from "../../components/CardAthlete";
 
 function AthleticList(props) {
   const history = useHistory();
   const { id, gameId, athleteId } = props.match.params;
+  const [loading, setLoading] = useState({ athlete: false });
+
   const idChampionship = id;
 
   const [championship, setChampionship] = useState("");
@@ -25,12 +34,15 @@ function AthleticList(props) {
   const [athleteList, setAthleteList] = useState([]);
 
   useEffect(async () => {
+    setLoading({ ...loading, athlete: true });
+
     try {
       const respChampionship = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship(respChampionship.data.name);
     } catch (error) {
+      setLoading({ ...loading, athlete: false });
       console.error(error);
     }
     try {
@@ -50,10 +62,13 @@ function AthleticList(props) {
           `${process.env.REACT_APP_API_BASE}athletes/${gameId}`
         );
         setAthleteList(respAthlete.data);
+        setLoading({ ...loading, athlete: false });
       } catch (error) {
+        setLoading({ ...loading, athlete: false });
         console.error(error);
       }
     } catch (error) {
+      setLoading({ ...loading, athlete: false });
       console.error(error);
     }
   }, []);
@@ -66,6 +81,9 @@ function AthleticList(props) {
 
   return (
     <div className="full-screen">
+      <Backdrop open={loading.athlete}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Navbar championship={idChampionship} game={gameId} athlete={athleteId} />
       <TextField
         label="Nome do Campeonato"
@@ -92,22 +110,15 @@ function AthleticList(props) {
         handleLikeAthletic={handleLikeAthletic}
       />
       {athleteList.map((athlete, idx) => (
-        <Link
-          className="text-decore-none"
-          to={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/${athlete._id}`}
-          key={idx}
-        >
-          <div className="disp-flex just-sp-evenly mg-x-1 game">
-            <div className="disp-flex flex-direct-col align-center">
-              <p>Nome do atleta</p>
-              <p>{athlete.name}</p>
-            </div>
-            <div className="disp-flex flex-direct-col align-center">
-              <p>Número da camisa</p>
-              <p>{athlete.shirtNumber}</p>
-            </div>
-          </div>
-        </Link>
+        <>
+          <CardAthlete
+            athlete={athlete}
+            idx={idx}
+            championship={idChampionship}
+            game={gameId}
+            link={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/${athlete._id}`}
+          />
+        </>
       ))}
       <Link
         to={`/campeonatos/detalhes/${idChampionship}/jogos`}

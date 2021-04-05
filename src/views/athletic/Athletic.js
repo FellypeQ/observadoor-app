@@ -1,11 +1,41 @@
 import { React, useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import api from "../../autenntication/api";
+
+import {
+  FormControl,
+  TextField,
+  Typography,
+  MenuItem,
+  Fab,
+  Button,
+  Backdrop,
+  CircularProgress,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  makeStyles,
+  Slider,
+  Divider,
+} from "@material-ui/core";
 
 import Inputs from "../../components/Inputs";
 import Game from "../../components/Game";
-import api from "../../autenntication/api";
-import { Link, useHistory } from "react-router-dom";
+import Navbar from "../../components/Navbar";
+
+const useStyles = makeStyles({
+  text: {
+    fontSize: "0.8rem",
+  },
+});
 
 function Athletic(props) {
+  const { id, gameId, athleteId } = props.match.params;
+  const [loading, setLoading] = useState({ athlete: false });
+
+  const classes = useStyles();
+
   const history = useHistory();
   const idChampionship = props.match.params.id;
   const idGame = props.match.params.gameId;
@@ -60,12 +90,15 @@ function Athletic(props) {
   const [pageAthlete, setPageAthlete] = useState(1);
 
   useEffect(async () => {
+    setLoading({ ...loading, athlete: true });
+
     try {
       const respChampionship = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship(respChampionship.data.name);
     } catch (error) {
+      setLoading({ ...loading, athlete: false });
       console.error(error);
     }
     try {
@@ -114,15 +147,26 @@ function Athletic(props) {
             userID: respAthlete.data.userID,
           });
         } catch (error) {
+          setLoading({ ...loading, athlete: false });
           console.error(error);
         }
       }
+      setLoading({ ...loading, athlete: false });
     } catch (error) {
+      setLoading({ ...loading, athlete: false });
       console.error(error);
     }
   }, []);
 
-  const handleChange = (event) => {
+  const handleChange = (event, slider, name, value) => {
+    if (slider === true) {
+      seAthlete({
+        ...athlete,
+        [name]: value,
+      });
+      return;
+    }
+
     seAthlete({
       ...athlete,
       [event.target.name]: event.target.value,
@@ -239,20 +283,47 @@ function Athletic(props) {
     //handleSave(event);
   }
 
+  const marks = [
+    {
+      value: 0,
+      label: "ruim",
+    },
+    {
+      value: 30,
+      label: "normal",
+    },
+    {
+      value: 60,
+      label: "bom",
+    },
+    {
+      value: 100,
+      label: "acima da média",
+    },
+  ];
+  function valuetext(text) {
+    let tempValue = marks.find((mark) => mark.label === text);
+
+    if (tempValue !== undefined) {
+      tempValue = marks.find((mark) => mark.label === text).value;
+    } else {
+      tempValue = 0;
+    }
+
+    return tempValue;
+  }
+  function changeSlider(name, value) {
+    const label = marks.find((mark) => mark.value === value).label;
+
+    handleChange("slider", true, name, label);
+  }
   return (
-    <div>
-      <Inputs
-        type="year"
-        className="text-30px wid-90 disp-flex just-center mg-b-2"
-        placeholder="Nome do Campeonato "
-        name="name"
-        value={championship}
-        onChange={handleChange}
-        disabled="disabled"
-      />
-      <div className="disp-flex just-end mg-b-2">
-        <h4>{nomeObsevador.user.name}</h4>
-      </div>
+    <div className="full-screen">
+      <Backdrop open={loading.athlete}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Navbar championship={idChampionship} game={gameId} athlete={athleteId} />
+
       <Game
         gameName={game.gameName}
         dateGame={game.dateGame}
@@ -262,46 +333,50 @@ function Athletic(props) {
         disabled={"disabled"}
         noButton={true}
       />
-      <form className="disp-flex flex-direct-col">
-        <h5>
+
+      <form className="mg-y-2">
+        <Typography variant="subtitle1">
           {props.location.pathname.includes("novo")
             ? "Novo Atleta"
             : "Editar Atleta"}
-        </h5>
-        {!idAthlete ? (
-          <p>Para inserir fotos, é necessário salvar o cadastro antes</p>
-        ) : (
-          <>
-            <img alt="picture" src={athletePhotos.principal} />
-            <Inputs
-              label="Foto atleta"
-              type="file"
-              className="disp-block"
-              onChange={(event) => {
-                saveImage(event, "principal");
-              }}
-            />
-          </>
-        )}
-        <Inputs
-          label="Nome: "
+        </Typography>
+        <TextField
+          label="Nome"
           type="text"
-          placeholder="Nome"
+          className="wid-60"
+          variant="outlined"
+          size="small"
+          margin="dense"
           name="name"
           value={athlete.name}
+          InputProps={{ className: "input-smaller" }}
           onChange={handleChange}
         />
-        <Inputs
-          label="Ano: "
-          placeholder="Ano de nascimento"
+        <TextField
+          label="Ano de nascimento"
           type="number"
+          InputProps={{ className: "input-smaller" }}
+          InputLabelProps={{ style: { fontSize: "max(0.7rem)" } }}
+          className="wid-35"
+          variant="outlined"
+          size="small"
+          margin="dense"
           name="year"
           value={athlete.year}
           onChange={handleChange}
         />
-        <Inputs
-          label="Data de nascimento: "
+        <TextField
+          label="Data de nascimento"
           type="date"
+          InputLabelProps={{ shrink: true }}
+          InputProps={{
+            className: "input-smaller",
+            style: { fontSize: "max(0.9rem)" },
+          }}
+          className="wid-45"
+          variant="outlined"
+          size="small"
+          margin="dense"
           name="birthDate"
           value={
             athlete.birthDate
@@ -310,118 +385,164 @@ function Athletic(props) {
           }
           onChange={handleChange}
         />
-        <Inputs
-          label="Time: "
-          placeholder="Equipe do atleta"
-          format="select"
+        <TextField
+          label="Equipe do atleta"
+          select
+          className="wid-50"
+          InputProps={{ className: "input-smaller" }}
+          variant="outlined"
+          size="small"
+          margin="dense"
           name="team"
           value={athlete.team}
           onChange={handleChange}
-          options={["Selecione o time", game.teamA, game.teamB]}
-        />
-        <Inputs
-          label="Numero da camisa: "
-          placeholder="Numero da camisa"
+        >
+          {[game.teamA, game.teamB].map((el, idx) => (
+            <MenuItem key={idx} value={el}>
+              {el}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          label="Perna de maior habilidade"
+          select
+          className="wid-60"
+          InputProps={{ className: "input-smaller" }}
+          InputLabelProps={{ style: { fontSize: "max(0.85rem)" } }}
+          variant="outlined"
+          size="small"
+          margin="dense"
+          name="skillLeg"
+          value={athlete.skillLeg}
+          onChange={handleChange}
+        >
+          {["Esquerda", "Direita"].map((el, idx) => (
+            <MenuItem key={idx} value={el}>
+              {el}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          label="Numero camisa"
           type="number"
+          className="wid-35"
+          variant="outlined"
+          size="small"
+          margin="dense"
+          InputProps={{ className: "input-smaller" }}
+          InputLabelProps={{ style: { fontSize: "max(0.8rem)" } }}
           name="shirtNumber"
           value={athlete.shirtNumber}
           onChange={handleChange}
         />
-        <Inputs
-          format="radio"
-          label="Perna de maior habilidade: "
-          type="radio"
-          name="skillLeg"
-          value={athlete.skillLeg}
-          onChange={handleChange}
-          options={["Esquerda", "Direita"]}
-        />
-        {pageAthlete === 1 && (
-          <div className="fundations">
-            <h4>Fundamentos</h4>
-            <Inputs
-              format="radio"
-              label="Passe curto: "
-              type="radio"
-              name="shortPass"
-              value={athlete.shortPass}
-              onChange={handleChange}
-              options={["ruim", "normal", "bom", "acima da média"]}
-            />
-            <Inputs
-              format="radio"
-              label="Passe longo: "
-              type="radio"
-              name="longPass"
-              value={athlete.longPass}
-              onChange={handleChange}
-              options={["ruim", "normal", "bom", "acima da média"]}
-            />
-            <Inputs
-              format="radio"
-              label="Cabeceio: "
-              type="radio"
-              name="header"
-              value={athlete.header}
-              onChange={handleChange}
-              options={["ruim", "normal", "bom", "acima da média"]}
-            />
-            <Inputs
-              format="radio"
-              label="Posicionamento: "
-              type="radio"
-              name="position"
-              value={athlete.position}
-              onChange={handleChange}
-              options={["ruim", "normal", "bom", "acima da média"]}
-            />
-            <Inputs
-              format="radio"
-              label="Velocidade: "
-              type="radio"
-              name="velocity"
-              value={athlete.velocity}
-              onChange={handleChange}
-              options={["ruim", "normal", "bom", "acima da média"]}
-            />
-            <Inputs
-              format="radio"
-              label="Poder de reação: "
-              type="radio"
-              name="reactionPower"
-              value={athlete.reactionPower}
-              onChange={handleChange}
-              options={["ruim", "normal", "bom", "acima da média"]}
-            />
-            <Inputs
-              format="radio"
-              label="Mobilidade: "
-              type="radio"
-              name="mobility"
-              value={athlete.mobility}
-              onChange={handleChange}
-              options={["ruim", "normal", "bom", "acima da média"]}
-            />
-            <Inputs
-              format="radio"
-              label="Mobilidade: "
-              type="radio"
-              name="finalization"
-              value={athlete.finalization}
-              onChange={handleChange}
-              options={["ruim", "normal", "bom", "acima da média"]}
-            />
-            <Inputs
-              format="textarea"
-              label="Adicionar comentário: "
-              placeholder="Digite seu comentário"
-              className=""
-              name="comentary"
-              value={athlete.comentary}
-              onChange={handleChange}
-            />
-          </div>
-        )}
+      </form>
+      {pageAthlete === 1 && (
+        <form>
+          <Divider className="mg-y-2" />
+          <Typography variant="subtitle2">Fundamentos</Typography>
+          <Typography className={classes.text}>Passe curto</Typography>
+          <Slider
+            name="shortPass"
+            step={null}
+            marks={marks}
+            valueLabelDisplay="off"
+            value={valuetext(athlete.shortPass)}
+            onChange={(event, value) => {
+              changeSlider("shortPass", value);
+            }}
+          />
+          <Typography className={classes.text}>Passe longo</Typography>
+          <Slider
+            name="longPass"
+            step={null}
+            marks={marks}
+            valueLabelDisplay="off"
+            value={valuetext(athlete.longPass)}
+            onChange={(event, value) => {
+              changeSlider("longPass", value);
+            }}
+          />
+          <Typography className={classes.text}>Cabeceio</Typography>
+          <Slider
+            name="header"
+            step={null}
+            marks={marks}
+            valueLabelDisplay="off"
+            value={valuetext(athlete.header)}
+            onChange={(event, value) => {
+              changeSlider("header", value);
+            }}
+          />
+          <Typography className={classes.text}>Posicionamento</Typography>
+          <Slider
+            name="position"
+            step={null}
+            marks={marks}
+            valueLabelDisplay="off"
+            value={valuetext(athlete.position)}
+            onChange={(event, value) => {
+              changeSlider("position", value);
+            }}
+          />
+          <Typography className={classes.text}>Velocidade</Typography>
+          <Slider
+            name="velocity"
+            step={null}
+            marks={marks}
+            valueLabelDisplay="off"
+            value={valuetext(athlete.velocity)}
+            onChange={(event, value) => {
+              changeSlider("velocity", value);
+            }}
+          />
+          <Typography className={classes.text}>Poder de reação</Typography>
+          <Slider
+            name="reactionPower"
+            step={null}
+            marks={marks}
+            valueLabelDisplay="off"
+            value={valuetext(athlete.reactionPower)}
+            onChange={(event, value) => {
+              changeSlider("reactionPower", value);
+            }}
+          />
+          <Typography className={classes.text}>Mobilidade</Typography>
+          <Slider
+            name="mobility"
+            step={null}
+            marks={marks}
+            valueLabelDisplay="off"
+            value={valuetext(athlete.mobility)}
+            onChange={(event, value) => {
+              changeSlider("mobility", value);
+            }}
+          />
+          <Typography className={classes.text}>Finalização</Typography>
+          <Slider
+            name="finalization"
+            step={null}
+            marks={marks}
+            valueLabelDisplay="off"
+            value={valuetext(athlete.finalization)}
+            onChange={(event, value) => {
+              changeSlider("finalization", value);
+            }}
+          />
+          <TextField
+            label="Adicionar comentário"
+            multiline
+            rows={3}
+            className="wid-95"
+            variant="outlined"
+            size="small"
+            margin="dense"
+            name="comentary"
+            value={athlete.comentary}
+            onChange={handleChange}
+          />
+        </form>
+      )}
+      <form className="disp-flex flex-direct-col">
         {pageAthlete === 2 && (
           <div>
             <h4>Contatos</h4>
@@ -568,3 +689,44 @@ function Athletic(props) {
 }
 
 export default Athletic;
+
+/*
+<FormControl component="fieldset">
+  <FormLabel component="legend">Perna de maior habilidade</FormLabel>
+  <RadioGroup
+    aria-label="gender"
+    name="skillLeg"
+    className="flex-direct-row"
+    value={athlete.skillLeg}
+    onChange={handleChange}
+  >
+    <FormControlLabel
+      value="Esquerda"
+      control={<Radio />}
+      label="Esquerda"
+    />
+    <FormControlLabel
+      value="Direita"
+      control={<Radio />}
+      label="Direita"
+    />
+  </RadioGroup>
+</FormControl>
+*/
+/*
+{!idAthlete ? (
+  <p>Para inserir fotos, é necessário salvar o cadastro antes</p>
+) : (
+  <>
+    <img alt="picture" src={athletePhotos.principal} />
+    <Inputs
+      label="Foto atleta"
+      type="file"
+      className="disp-block"
+      onChange={(event) => {
+        saveImage(event, "principal");
+      }}
+    />
+  </>
+)}
+*/

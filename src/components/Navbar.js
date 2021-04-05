@@ -16,6 +16,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SportsSoccerIcon from "@material-ui/icons/SportsSoccer";
+import GroupIcon from "@material-ui/icons/Group";
 
 function Navbar(props) {
   const history = useHistory();
@@ -94,6 +95,19 @@ function Navbar(props) {
                   <SportsSoccerIcon />
                 </ListItemIcon>
                 <ListItemText primary={"Jogos"} />
+              </ListItem>
+            </Link>
+          )}
+          {ids.games !== "" && ids.games !== undefined && (
+            <Link
+              to={`/campeonatos/detalhes/${ids.championship}/jogos/${ids.games}/athlets`}
+              className="text-decore-none text-white"
+            >
+              <ListItem>
+                <ListItemIcon className="text-white">
+                  <GroupIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Atletas"} />
               </ListItem>
             </Link>
           )}

@@ -17,7 +17,7 @@ import RedoIcon from "@material-ui/icons/Redo";
 
 const useStyles = makeStyles({
   root: {
-    margin: "1% auto",
+    margin: "1% 0",
   },
   button: {
     height: "24px",
@@ -164,11 +164,11 @@ function Game(props) {
             )}
             {props.edition ? (
               <Link
-                className="text-decore-none wid-45"
+                className="text-decore-none"
                 to={`/campeonatos/detalhes/${props.idChanpionship}/jogos/${props.idGame}/athlets`}
               >
                 <Button
-                  className={`${classes.root} ${classes.button} wid-100`}
+                  className={`${classes.root} ${classes.button}`}
                   size="small"
                   variant="contained"
                   color="primary"
