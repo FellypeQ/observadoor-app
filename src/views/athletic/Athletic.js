@@ -4,6 +4,7 @@ import api from "../../autenntication/api";
 
 import {
   FormControl,
+  FormGroup,
   TextField,
   Typography,
   MenuItem,
@@ -18,6 +19,7 @@ import {
   makeStyles,
   Slider,
   Divider,
+  InputLabel,
 } from "@material-ui/core";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import SaveIcon from "@material-ui/icons/Save";
@@ -27,8 +29,14 @@ import ReplyIcon from "@material-ui/icons/Reply";
 import Inputs from "../../components/Inputs";
 import Game from "../../components/Game";
 import Navbar from "../../components/Navbar";
+import CardContact from "../../components/CardContact";
 
 const useStyles = makeStyles({
+  MuiTypography: {
+    body1: {
+      fontSize: "0.8rem",
+    },
+  },
   text: {
     fontSize: "0.8rem",
   },
@@ -548,108 +556,85 @@ function Athletic(props) {
       )}
       <form className="disp-flex flex-direct-col">
         {pageAthlete === 2 && (
-          <div>
-            <h4>Contatos</h4>
-            {athlete.contacts.map((contact, index) => (
-              <div key={index} className="bdtt">
-                <Inputs
-                  label="Nome: "
-                  placeholder="Nome do contato"
-                  type="text"
-                  name="name"
-                  value={contact.name}
-                  onChange={(event) =>
-                    changeContacts(
-                      event,
-                      "change",
-                      index,
-                      "name",
-                      event.target.value
-                    )
-                  }
+          <>
+            <div className="mg-y-2">
+              <TextField
+                label="Status da avaliação"
+                select
+                className="wid-50"
+                InputProps={{ className: "input-smaller" }}
+                variant="outlined"
+                size="small"
+                margin="dense"
+                name="avaliationStatus"
+                value={athlete.avaliationStatus}
+                onChange={handleChange}
+              >
+                {["Aprovado", "Observar", "Aprovado direto"].map((el, idx) => (
+                  <MenuItem key={idx} value={el}>
+                    {el}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
+                label="Concorrência"
+                select
+                className="wid-45"
+                InputProps={{ className: "input-smaller" }}
+                variant="outlined"
+                size="small"
+                margin="dense"
+                name="competitionEvaluators"
+                value={athlete.competitionEvaluators}
+                onChange={handleChange}
+              >
+                {["Baixa", "Normal", "Alta"].map((el, idx) => (
+                  <MenuItem key={idx} value={el}>
+                    {el}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">
+                Agendar avaliação no clube
+              </FormLabel>
+              <RadioGroup
+                name="avaliationInClub"
+                className="flex-direct-row"
+                value={athlete.avaliationInClub}
+                onChange={handleChange}
+                size="small"
+              >
+                <FormControlLabel
+                  className={classes.MuiTypography}
+                  value="Baixa"
+                  control={<Radio />}
+                  label="Baixa"
                 />
-                <Inputs
-                  label="Telefone: "
-                  placeholder="Telefone do contato"
-                  type="text"
-                  name="phone"
-                  value={contact.phone}
-                  onChange={(event) =>
-                    changeContacts(
-                      event,
-                      "change",
-                      index,
-                      "phone",
-                      event.target.value
-                    )
-                  }
+                <FormControlLabel
+                  value="Normal"
+                  control={<Radio />}
+                  label="Normal"
                 />
-                <Inputs
-                  format="select"
-                  label="Responsável: "
-                  name="responsable"
-                  value={contact.responsable}
-                  options={[
-                    "Selecione o responsárvel",
-                    "Pai",
-                    "Mãe",
-                    "Empresário",
-                    "Tio(a)",
-                    "Irmão",
-                    "Irmã",
-                    "Amigo(a)",
-                    "Outro",
-                  ]}
-                  onChange={(event) =>
-                    changeContacts(
-                      event,
-                      "change",
-                      index,
-                      "responsable",
-                      event.target.value
-                    )
-                  }
+                <FormControlLabel
+                  value="Prioridade"
+                  control={<Radio />}
+                  label="Prioridade"
                 />
-                <button onClick={(event) => changeContacts(event, "add")}>
-                  Adicionar outro contato
-                </button>
-                {index > 0 && (
-                  <button
-                    onClick={(event) => changeContacts(event, "delete", index)}
-                  >
-                    Escluir contato
-                  </button>
-                )}
-              </div>
+              </RadioGroup>
+            </FormControl>
+
+            <InputLabel className="mg-y-2">Contatos</InputLabel>
+            {athlete.contacts.map((contact, index, arr) => (
+              <CardContact
+                contact={contact}
+                index={index}
+                quantity={arr.length}
+                changeContacts={changeContacts}
+              />
             ))}
-            <h5>Status da avaliação:</h5>
-            <Inputs
-              format="radio"
-              type="radio"
-              name="avaliationStatus"
-              value={athlete.avaliationStatus}
-              onChange={handleChange}
-              options={["Aprovado", "Observar", "Aprovado direto"]}
-            />
-            <h5>Agendar avaliação no clube:</h5>
-            <Inputs
-              format="radio"
-              type="radio"
-              name="avaliationInClub"
-              value={athlete.avaliationInClub}
-              onChange={handleChange}
-              options={["Prioridade", "Normal"]}
-            />
-            <h5>Concorrência de avaliadores:</h5>
-            <Inputs
-              format="radio"
-              type="radio"
-              name="competitionEvaluators"
-              value={athlete.competitionEvaluators}
-              onChange={handleChange}
-              options={["Alta", "Normal", "Baixa"]}
-            />
-          </div>
+          </>
         )}
         {pageAthlete === 3 && (
           <div>

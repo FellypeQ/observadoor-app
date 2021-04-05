@@ -110,15 +110,13 @@ function AthleticList(props) {
         handleLikeAthletic={handleLikeAthletic}
       />
       {athleteList.map((athlete, idx) => (
-        <>
-          <CardAthlete
-            athlete={athlete}
-            idx={idx}
-            championship={idChampionship}
-            game={gameId}
-            link={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/${athlete._id}`}
-          />
-        </>
+        <CardAthlete
+          athlete={athlete}
+          idx={idx}
+          championship={idChampionship}
+          game={gameId}
+          link={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/${athlete._id}`}
+        />
       ))}
       <Link
         to={`/campeonatos/detalhes/${idChampionship}/jogos`}

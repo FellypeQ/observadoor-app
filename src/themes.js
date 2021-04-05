@@ -75,6 +75,11 @@ const theme = createMuiTheme({
         fontSize: "0.6rem",
       },
     },
+    MuiFormControlLabel: {
+      root: {
+        fontSize: "12px",
+      },
+    },
   },
 });
 
