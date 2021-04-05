@@ -659,14 +659,6 @@ function Athletic(props) {
         )}
       </form>
       <div className="disp-flex just-sp-evenly align-center flex-wrap">
-        {pageAthlete > 1 && (
-          <button
-            className="btn btn-blue mg-y-2 "
-            onClick={handleChangePageRegresse}
-          >
-            Voltar
-          </button>
-        )}
         <Button
           variant="contained"
           color="primary"
@@ -698,19 +690,31 @@ function Athletic(props) {
             Excluir
           </Button>
         )}
-        <Link
-          to={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/athlets`}
-          className="text-decore-none"
-        >
+        {pageAthlete > 1 ? (
           <Button
             variant="outlined"
             color="primary"
             size="small"
             startIcon={<ReplyIcon />}
+            onClick={handleChangePageRegresse}
           >
             Voltar
           </Button>
-        </Link>
+        ) : (
+          <Link
+            to={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/athlets`}
+            className="text-decore-none"
+          >
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              startIcon={<ReplyIcon />}
+            >
+              Atletas
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );
