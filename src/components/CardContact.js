@@ -38,7 +38,7 @@ function CardContact(props) {
         <TextField
           label="Nome contato"
           type="text"
-          className="wid-50"
+          className="wid-95"
           InputProps={{ className: "input-smaller" }}
           variant="outlined"
           size="small"
@@ -51,6 +51,26 @@ function CardContact(props) {
               "change",
               props.index,
               "name",
+              event.target.value
+            )
+          }
+        />
+        <TextField
+          label="Telefone contato"
+          type="text"
+          className="wid-50"
+          InputProps={{ className: "input-smaller" }}
+          variant="outlined"
+          size="small"
+          margin="dense"
+          name="phone"
+          value={props.contact.phone}
+          onChange={(event) =>
+            props.changeContacts(
+              event,
+              "change",
+              props.index,
+              "phone",
               event.target.value
             )
           }
@@ -90,26 +110,6 @@ function CardContact(props) {
             </MenuItem>
           ))}
         </TextField>
-        <TextField
-          label="Telefone contato"
-          type="text"
-          className="wid-50"
-          InputProps={{ className: "input-smaller" }}
-          variant="outlined"
-          size="small"
-          margin="dense"
-          name="phone"
-          value={props.contact.phone}
-          onChange={(event) =>
-            props.changeContacts(
-              event,
-              "change",
-              props.index,
-              "phone",
-              event.target.value
-            )
-          }
-        />
       </CardContent>
       <CardActions className="just-sp-evenly">
         {props.index === props.quantity - 1 && (

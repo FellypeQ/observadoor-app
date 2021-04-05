@@ -708,29 +708,6 @@ function Athletic(props) {
 export default Athletic;
 
 /*
-<FormControl component="fieldset">
-  <FormLabel component="legend">Perna de maior habilidade</FormLabel>
-  <RadioGroup
-    aria-label="gender"
-    name="skillLeg"
-    className="flex-direct-row"
-    value={athlete.skillLeg}
-    onChange={handleChange}
-  >
-    <FormControlLabel
-      value="Esquerda"
-      control={<Radio />}
-      label="Esquerda"
-    />
-    <FormControlLabel
-      value="Direita"
-      control={<Radio />}
-      label="Direita"
-    />
-  </RadioGroup>
-</FormControl>
-*/
-/*
 {!athleteId ? (
   <p>Para inserir fotos, é necessário salvar o cadastro antes</p>
 ) : (
