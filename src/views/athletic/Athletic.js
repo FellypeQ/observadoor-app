@@ -19,6 +19,10 @@ import {
   Slider,
   Divider,
 } from "@material-ui/core";
+import PostAddIcon from "@material-ui/icons/PostAdd";
+import SaveIcon from "@material-ui/icons/Save";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ReplyIcon from "@material-ui/icons/Reply";
 
 import Inputs from "../../components/Inputs";
 import Game from "../../components/Game";
@@ -28,20 +32,21 @@ const useStyles = makeStyles({
   text: {
     fontSize: "0.8rem",
   },
+  danger: {
+    backgroundColor: "#ef9a9a",
+    "&:hover": { backgroundColor: "#af4448" },
+  },
 });
 
 function Athletic(props) {
   const { id, gameId, athleteId } = props.match.params;
+  const idChampionship = id;
+
   const [loading, setLoading] = useState({ athlete: false });
 
   const classes = useStyles();
 
   const history = useHistory();
-  const idChampionship = props.match.params.id;
-  const idGame = props.match.params.gameId;
-  const idAthlete = props.match.params.athleteId;
-  const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
-  const [championship, setChampionship] = useState("");
   const [game, setGame] = useState({
     gameName: "",
     dateGame: "",
@@ -55,7 +60,7 @@ function Athletic(props) {
     documents: [],
   });
   const [athlete, seAthlete] = useState({
-    idGame: idGame,
+    idGame: gameId,
     idChampionship: idChampionship,
     picture: athletePhotos.principal,
     name: "",
@@ -96,14 +101,13 @@ function Athletic(props) {
       const respChampionship = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
-      setChampionship(respChampionship.data.name);
     } catch (error) {
       setLoading({ ...loading, athlete: false });
       console.error(error);
     }
     try {
       const respGame = await api.get(
-        `${process.env.REACT_APP_API_BASE}game/${idGame}`
+        `${process.env.REACT_APP_API_BASE}game/${gameId}`
       );
       setGame({
         gameName: respGame.data.gameName,
@@ -116,7 +120,7 @@ function Athletic(props) {
       if (props.match.params.athleteId) {
         try {
           const respAthlete = await api.get(
-            `${process.env.REACT_APP_API_BASE}athlete/${idAthlete}`
+            `${process.env.REACT_APP_API_BASE}athlete/${athleteId}`
           );
 
           seAthlete({
@@ -228,11 +232,11 @@ function Athletic(props) {
   const handleSave = async (event) => {
     event.preventDefault();
 
-    if (idAthlete) {
+    if (athleteId) {
       console.log("atualizando");
       try {
         const respUpdateAthlete = await api.patch(
-          `${process.env.REACT_APP_API_BASE}athlete/${idAthlete}`,
+          `${process.env.REACT_APP_API_BASE}athlete/${athleteId}`,
           athlete
         );
         console.log("atualizado");
@@ -248,7 +252,7 @@ function Athletic(props) {
         );
         console.log(respCreateAthlete);
         history.push(
-          `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/${respCreateAthlete.data.result._id}`
+          `/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/${respCreateAthlete.data.result._id}`
         );
         console.log("criado");
         window.location.reload(true);
@@ -260,11 +264,11 @@ function Athletic(props) {
   const handleDelete = async () => {
     try {
       const respDeleteAthlete = await api.delete(
-        `${process.env.REACT_APP_API_BASE}athlete/${idAthlete}`,
+        `${process.env.REACT_APP_API_BASE}athlete/${athleteId}`,
         athlete
       );
       history.push(
-        `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/athlets`
+        `/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/athlets`
       );
     } catch (error) {
       console.error(error);
@@ -663,25 +667,49 @@ function Athletic(props) {
             Voltar
           </button>
         )}
-        <button
-          className="btn btn-black mg-y-2 "
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          startIcon={<PostAddIcon />}
           onClick={handleChangePageAvance}
         >
-          {pageAthlete === 1 && "Adicionar mais informações"}
-          {pageAthlete === 2 && "Adicionar fotos e documentos"}
-          {pageAthlete === 3 && "Ver ficha do atleta"}
-        </button>
-        <button className="btn btn-green mg-y-2 " onClick={handleSave}>
+          {pageAthlete === 1 && "Mais informações"}
+          {pageAthlete === 2 && "Fotos e documentos"}
+          {pageAthlete === 3 && "Ficha do atleta"}
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          startIcon={<SaveIcon />}
+          onClick={handleSave}
+        >
           Salvar
-        </button>
-        <button className="btn btn-red mg-y-2 " onClick={handleDelete}>
-          Excluir
-        </button>
+        </Button>
+        {athleteId && (
+          <Button
+            variant="contained"
+            className={classes.danger}
+            size="small"
+            startIcon={<DeleteIcon />}
+            onClick={handleDelete}
+          >
+            Excluir
+          </Button>
+        )}
         <Link
-          to={`/campeonatos/detalhes/${idChampionship}/jogos`}
+          to={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/athlets`}
           className="text-decore-none"
         >
-          <button className="btn btn-blue mg-y-2 ">Voltar para jogos</button>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            startIcon={<ReplyIcon />}
+          >
+            Voltar
+          </Button>
         </Link>
       </div>
     </div>
@@ -714,7 +742,7 @@ export default Athletic;
 </FormControl>
 */
 /*
-{!idAthlete ? (
+{!athleteId ? (
   <p>Para inserir fotos, é necessário salvar o cadastro antes</p>
 ) : (
   <>
