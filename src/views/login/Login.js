@@ -13,6 +13,7 @@ import {
   InputAdornment,
   IconButton,
   InputLabel,
+  FormHelperText,
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
@@ -91,6 +92,7 @@ function Login(props) {
             required={true}
             type="email"
             error={error.login !== "" ? true : false}
+            helperText={error.login}
             name="email"
             value={formLogin.email}
             onChange={handleChange}
@@ -105,6 +107,7 @@ function Login(props) {
               onChange={handleChange}
               required={true}
               size="small"
+              error={error.login !== "" ? true : false}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -119,6 +122,7 @@ function Login(props) {
                 </InputAdornment>
               }
             />
+            <FormHelperText error>{error.login}</FormHelperText>
           </FormControl>
 
           <Button
