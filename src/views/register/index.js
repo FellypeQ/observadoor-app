@@ -22,7 +22,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [nr_celular, setNrCelular] = useState("");
-  const [dt_nascimento, setDtNascimento] = useState("");
+  const [dt_nascimento, setDtNascimento] = useState(new Date());
   const [genero, setGenero] = useState("1");
   const [error, setError] = useState({
     username: "",
@@ -58,7 +58,7 @@ export default function Register() {
       await axios.post(`${process.env.REACT_APP_API_BASE}usuarios`, usuario);
       history.push("/campeonatos");
     } catch (error) {
-      if (error.response.status === 406) {
+      if (error.response.status === 406 || Object.keys(error.response.data.erros).length>0) {
         setError({
           username: error.response.data.erros.username || "",
           email: error.response.data.erros.email || "",
