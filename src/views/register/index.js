@@ -22,7 +22,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [nr_celular, setNrCelular] = useState("");
-  const [dt_nascimento, setDtNascimento] = useState(new Date());
+  const [dt_nascimento, setDtNascimento] = useState('');
   const [genero, setGenero] = useState("1");
   const [error, setError] = useState({
     username: "",
@@ -160,6 +160,19 @@ export default function Register() {
           helperText={error.nr_celular}
           value={nr_celular}
           onChange={(e) => setNrCelular(e.target.value)}
+        />
+
+<TextField
+          label="Data de Nascimento"
+type='date'
+          id="outlined-basic"
+          variant="outlined"
+          size="small"
+          required
+          error={error.dt_nascimento.length > 0 ? true : false}
+          helperText={error.dt_nascimento}
+          value={dt_nascimento}
+          onChange={(e) => setDtNascimento(e.target.value)}
         />
 
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
