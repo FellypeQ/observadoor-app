@@ -165,6 +165,7 @@ export default function Register() {
 <TextField
           label="Data de Nascimento"
 type='date'
+class name='wid-90'
           id="outlined-basic"
           variant="outlined"
           size="small"
@@ -175,25 +176,7 @@ type='date'
           onChange={(e) => setDtNascimento(e.target.value)}
         />
 
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            label="Data de Nascimento"
-            color="primary"
-            margin="normal"
-            id="date-picker-dialog"
-            format="MM/dd/yyyy"
-            required
-            size="small"
-            error={error.dt_nascimento.length > 0 ? true : false}
-            helperText={error.dt_nascimento}
-            value={dt_nascimento}
-            onChange={handleDateChange}
-            className="formatacaoCalendar"
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-          />
-        </MuiPickersUtilsProvider>
+        
         <div>
           <RadioGroup
             row
