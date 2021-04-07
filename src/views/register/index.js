@@ -22,7 +22,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [nr_celular, setNrCelular] = useState("");
-  const [dt_nascimento, setDtNascimento] = useState('');
+  const [dt_nascimento, setDtNascimento] = useState("");
   const [genero, setGenero] = useState("1");
   const [error, setError] = useState({
     username: "",
@@ -58,7 +58,10 @@ export default function Register() {
       await axios.post(`${process.env.REACT_APP_API_BASE}usuarios`, usuario);
       history.push("/campeonatos");
     } catch (error) {
-      if (error.response.status === 406 || Object.keys(error.response.data.erros).length>0) {
+      if (
+        error.response.status === 406 ||
+        Object.keys(error.response.data.erros).length > 0
+      ) {
         setError({
           username: error.response.data.erros.username || "",
           email: error.response.data.erros.email || "",
@@ -161,12 +164,11 @@ export default function Register() {
           value={nr_celular}
           onChange={(e) => setNrCelular(e.target.value)}
         />
-
-<TextField
+        <TextField
           label="Data de Nascimento"
-type='date'
-class name='wid-90'
-          id="outlined-basic"
+          className="wid-75"
+          type="date"
+          InputLabelProps={{ shrink: true }}
           variant="outlined"
           size="small"
           required
@@ -175,31 +177,29 @@ class name='wid-90'
           value={dt_nascimento}
           onChange={(e) => setDtNascimento(e.target.value)}
         />
-
-        
-        <div>
-          <RadioGroup
-            row
-            aria-label="position"
-            name="position"
-            defaultValue="top"
-          >
-            <FormControlLabel
-              value="1"
-              control={<Radio color="primary" />}
-              label="Masculino"
-              labelPlacement="end"
-              onChange={(e) => setGenero(e.target.value)}
-            />
-            <FormControlLabel
-              value="2"
-              control={<Radio color="primary" />}
-              label="Feminino"
-              labelPlacement="end"
-              onChange={(e) => setGenero(e.target.value)}
-            />
-          </RadioGroup>
-        </div>
+        <RadioGroup
+          row
+          aria-label="position"
+          name="position"
+          defaultValue="top"
+        >
+          <FormControlLabel
+            label="Masculino"
+            value="1"
+            checked={genero === "1" ? true : false}
+            control={<Radio color="primary" />}
+            labelPlacement="end"
+            onChange={(e) => setGenero(e.target.value)}
+          />
+          <FormControlLabel
+            label="Feminino"
+            value="2"
+            checked={genero === "2" ? true : false}
+            control={<Radio color="primary" />}
+            labelPlacement="end"
+            onChange={(e) => setGenero(e.target.value)}
+          />
+        </RadioGroup>
 
         <Button variant="contained" color="primary" type="submit">
           Cadastrar
