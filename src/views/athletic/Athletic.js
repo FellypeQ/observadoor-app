@@ -20,16 +20,20 @@ import {
   Slider,
   Divider,
   InputLabel,
+  IconButton,
 } from "@material-ui/core";
+import { green } from "@material-ui/core/colors";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ReplyIcon from "@material-ui/icons/Reply";
+import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import CheckIcon from "@material-ui/icons/Check";
 
-import Inputs from "../../components/Inputs";
 import Game from "../../components/Game";
 import Navbar from "../../components/Navbar";
 import CardContact from "../../components/CardContact";
+import { Height } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   MuiTypography: {
@@ -44,13 +48,20 @@ const useStyles = makeStyles({
     backgroundColor: "#ef9a9a",
     "&:hover": { backgroundColor: "#af4448" },
   },
+  photoProgress: {
+    color: green[500],
+    position: "absolute",
+    top: "-4px !important",
+    left: "-2px !important",
+    //zIndex: 1,
+  },
 });
 
 function Athletic(props) {
   const { id, gameId, athleteId } = props.match.params;
   const idChampionship = id;
 
-  const [loading, setLoading] = useState({ athlete: false });
+  const [loading, setLoading] = useState({ athlete: false, photo: false });
 
   const classes = useStyles();
 
@@ -70,7 +81,7 @@ function Athletic(props) {
   const [athlete, seAthlete] = useState({
     idGame: gameId,
     idChampionship: idChampionship,
-    picture: athletePhotos.principal,
+    picture: "",
     name: "",
     year: "",
     birthDate: "",
@@ -283,14 +294,29 @@ function Athletic(props) {
     }
   };
 
-  function saveImage(event, group) {
+  async function saveImage(event, group) {
     event.preventDefault();
 
-    setAthletePhotos({
-      ...athletePhotos,
-      [group]:
-        "https://media.macphun.com/img/uploads/customer/how-to/579/15531840725c93b5489d84e9.43781620.jpg?q=85&w=1340",
-    });
+    if (loading.photo) {
+      return;
+    }
+
+    setLoading({ ...loading, photo: true });
+    const photo = event.target.value;
+    console.log(photo);
+
+    try {
+      const respSaveImage = await api.post(
+        `${process.env.REACT_APP_API_BASE}arquivos`,
+        photo
+      );
+      setLoading({ ...loading, photo: false });
+
+      console.log(respSaveImage);
+    } catch (error) {
+      setLoading({ ...loading, photo: false });
+      console.error("respSaveImage", error);
+    }
 
     //handleSave(event);
   }
@@ -637,10 +663,66 @@ function Athletic(props) {
           </>
         )}
         {pageAthlete === 3 && (
-          <div>
-            <h4>Adicionar fotos do atleta:</h4>
-            <h4>Adicionar documentos do atleta:</h4>
-          </div>
+          <>
+            <div className="disp-flex align-center">
+              <Typography variant="subtitle1">Fotos do atleta</Typography>
+              <div className="wid-10 mg-x-3">
+                <input
+                  accept="image/*"
+                  className="disp-none"
+                  id="more-photos"
+                  type="file"
+                  multiple
+                  onChange={saveImage}
+                />
+                <label htmlFor="more-photos" className="pos-relative">
+                  <IconButton
+                    className="pad-0"
+                    color="primary"
+                    aria-label="upload picture"
+                    component="span"
+                  >
+                    <PhotoCamera />
+                  </IconButton>
+                  {loading.photo && (
+                    <CircularProgress
+                      size={27}
+                      className={classes.photoProgress}
+                    />
+                  )}
+                </label>
+              </div>
+            </div>
+
+            {athlete.morePhotos.map((photo) => (
+              <img src={photo} />
+            ))}
+
+            <div className="disp-flex align-center">
+              <Typography variant="subtitle1">Documentos do atleta</Typography>
+              <div className="wid-10 mg-x-3">
+                <input
+                  className="disp-none"
+                  id="document-photos"
+                  type="file"
+                  multiple
+                />
+                <label htmlFor="document-photos">
+                  <IconButton
+                    className="pad-0"
+                    color="primary"
+                    aria-label="upload picture"
+                    component="span"
+                  >
+                    <PhotoCamera />
+                  </IconButton>
+                </label>
+              </div>
+            </div>
+            {athlete.documentPhotos.map((photo) => (
+              <img src={photo} />
+            ))}
+          </>
         )}
       </form>
       <div className="disp-flex just-sp-evenly align-center flex-wrap">

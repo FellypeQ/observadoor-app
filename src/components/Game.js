@@ -51,7 +51,6 @@ function Game(props) {
 
   function transformDate(date) {
     if (date === "") {
-      console.log(date);
       return;
     }
     const dateTime = date.split("T");
