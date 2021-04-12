@@ -114,6 +114,7 @@ function AthleticList(props) {
           athlete={athlete}
           idx={idx}
           championship={idChampionship}
+          athleteId={athlete._id}
           game={gameId}
           link={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/${athlete._id}`}
         />

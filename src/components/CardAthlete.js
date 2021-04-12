@@ -1,6 +1,8 @@
 import { React } from "react";
 import { Link } from "react-router-dom";
 
+import api from "../autenntication/api";
+
 import {
   Button,
   Card,
@@ -27,6 +29,17 @@ const useStyles = makeStyles({
 
 function CardAthlete(props) {
   const classes = useStyles();
+
+  async function handlePDF(id) {
+    try {
+      const respPDF = await api.get(
+        `${process.env.REACT_APP_API_BASE}generate-pdf/${id}`
+      );
+      //console.log(respPDF);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <Card className="mg-y-2">
@@ -64,6 +77,7 @@ function CardAthlete(props) {
                 variant="contained"
                 color="primary"
                 startIcon={<PictureAsPdfIcon />}
+                onClick={(_) => handlePDF(props.athleteId)}
               >
                 Gerar PDF
               </Button>
