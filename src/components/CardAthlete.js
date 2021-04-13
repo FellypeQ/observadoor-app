@@ -35,6 +35,7 @@ function CardAthlete(props) {
       const respPDF = await api.get(
         `${process.env.REACT_APP_API_BASE}generate-pdf/${id}`
       );
+window.open(respPDF.data)
       //console.log(respPDF);
     } catch (error) {
       console.error(error);
