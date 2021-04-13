@@ -35,8 +35,7 @@ function CardAthlete(props) {
       const respPDF = await api.get(
         `${process.env.REACT_APP_API_BASE}generate-pdf/${id}`
       );
-window.open(respPDF.data)
-      //console.log(respPDF);
+      window.open(`${process.env.REACT_APP_API_BASE}generate-pdf/${id}`);
     } catch (error) {
       console.error(error);
     }
@@ -44,9 +43,12 @@ window.open(respPDF.data)
 
   return (
     <Card className="mg-y-2">
-      <Link className="text-decore-none link" to={props.link}>
-        <CardActionArea>
-          <CardContent className="disp-flex just-center">
+      <CardActionArea>
+        <CardContent>
+          <Link
+            className="text-decore-none link disp-flex just-center"
+            to={props.link}
+          >
             <TextField
               label="Nome do atleta"
               className="input-game-card wid-40"
@@ -69,23 +71,24 @@ window.open(respPDF.data)
               value={props.athlete.shirtNumber}
               disabled
             />
-          </CardContent>
-          <CardActions className="disp-flex align-center just-sp-evenly">
-            <Link className="text-decore-none">
-              <Button
-                className={`${classes.root} ${classes.button}`}
-                size="small"
-                variant="contained"
-                color="primary"
-                startIcon={<PictureAsPdfIcon />}
-                onClick={(_) => handlePDF(props.athleteId)}
-              >
-                Gerar PDF
-              </Button>
-            </Link>
-          </CardActions>
-        </CardActionArea>
-      </Link>
+          </Link>
+        </CardContent>
+        <CardActions className="disp-flex align-center just-sp-evenly">
+          <a className="text-decore-none" download>
+            <Button
+              className={`${classes.root} ${classes.button}`}
+              size="small"
+              variant="contained"
+              color="primary"
+              startIcon={<PictureAsPdfIcon />}
+              onClick={(_) => handlePDF(props.athleteId)}
+              download
+            >
+              Gerar PDF
+            </Button>
+          </a>
+        </CardActions>
+      </CardActionArea>
     </Card>
   );
 }
