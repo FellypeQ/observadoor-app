@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState } from "react";
 import { Link } from "react-router-dom";
 
 import api from "../autenntication/api";
@@ -13,6 +13,7 @@ import {
   Typography,
   TextField,
   makeStyles,
+  CircularProgress,
 } from "@material-ui/core";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
@@ -25,18 +26,35 @@ const useStyles = makeStyles({
     width: "110px",
     fontSize: "8px",
   },
+  buttonProgress: {
+    color: "green",
+    position: "absolute",
+    top: "50%",
+    left: "45%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
 });
 
 function CardAthlete(props) {
   const classes = useStyles();
 
+  const [loading, setLoading] = useState({ pdf: false });
+
   async function handlePDF(id) {
+    setLoading({ ...loading, pdf: true });
     try {
       const respPDF = await api.get(
-        `${process.env.REACT_APP_API_BASE}generate-pdf/${id}`
+        `${process.env.REACT_APP_API_BASE}generate-pdf/${id}`,
+        { responseType: "blob" }
       );
-      window.open(`${process.env.REACT_APP_API_BASE}generate-pdf/${id}`);
+
+      const fileURL = URL.createObjectURL(respPDF.data);
+
+      window.open(fileURL);
+      setLoading({ ...loading, pdf: false });
     } catch (error) {
+      setLoading({ ...loading, pdf: false });
       console.error(error);
     }
   }
@@ -73,20 +91,22 @@ function CardAthlete(props) {
             />
           </Link>
         </CardContent>
-        <CardActions className="disp-flex align-center just-sp-evenly">
-          <a className="text-decore-none" download>
-            <Button
-              className={`${classes.root} ${classes.button}`}
-              size="small"
-              variant="contained"
-              color="primary"
-              startIcon={<PictureAsPdfIcon />}
-              onClick={(_) => handlePDF(props.athleteId)}
-              download
-            >
-              Gerar PDF
-            </Button>
-          </a>
+        <CardActions className="disp-flex align-center just-sp-evenly pos-relative">
+          <Button
+            className={`${classes.root} ${classes.button}`}
+            size="small"
+            variant="contained"
+            color="primary"
+            startIcon={<PictureAsPdfIcon />}
+            onClick={(_) => handlePDF(props.athleteId)}
+            download
+            disabled={loading.pdf}
+          >
+            Gerar PDF
+          </Button>
+          {loading.pdf && (
+            <CircularProgress size={24} className={classes.buttonProgress} />
+          )}
         </CardActions>
       </CardActionArea>
     </Card>
