@@ -26,6 +26,10 @@ const useStyles = makeStyles({
     width: "110px",
     fontSize: "8px",
   },
+  buttonError: {
+    border: "#c63f17 1px solid",
+    backgroundColor: "#ff7043",
+  },
   buttonProgress: {
     color: "green",
     position: "absolute",
@@ -40,6 +44,7 @@ function CardAthlete(props) {
   const classes = useStyles();
 
   const [loading, setLoading] = useState({ pdf: false });
+  const [error, setError] = useState({ pdf: false });
 
   async function handlePDF(id) {
     setLoading({ ...loading, pdf: true });
@@ -53,8 +58,10 @@ function CardAthlete(props) {
 
       window.open(fileURL);
       setLoading({ ...loading, pdf: false });
+      setError({ ...error, pdf: false });
     } catch (error) {
       setLoading({ ...loading, pdf: false });
+      setError({ ...error, pdf: true });
       console.error(error);
     }
   }
@@ -93,7 +100,9 @@ function CardAthlete(props) {
         </CardContent>
         <CardActions className="disp-flex align-center just-sp-evenly pos-relative">
           <Button
-            className={`${classes.root} ${classes.button}`}
+            className={`${classes.root} ${classes.button} ${
+              error.pdf && classes.buttonError
+            }`}
             size="small"
             variant="contained"
             color="primary"
