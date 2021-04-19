@@ -54,9 +54,10 @@ function CardAthlete(props) {
         { responseType: "blob" }
       );
 
-      const fileURL = URL.createObjectURL(respPDF.data);
-
+      const blob = new Blob([respPDF.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(blob);
       window.open(fileURL);
+
       setLoading({ ...loading, pdf: false });
       setError({ ...error, pdf: false });
     } catch (error) {
