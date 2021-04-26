@@ -73,12 +73,7 @@ function Athletic(props) {
     teamA: "",
     teamB: "",
   });
-  const [athletePhotos, setAthletePhotos] = useState({
-    principal: "",
-    others: [],
-    documents: [],
-  });
-  const [athlete, seAthlete] = useState({
+  const [athlete, setAthlete] = useState({
     idGame: gameId,
     idChampionship: idChampionship,
     picture: "",
@@ -142,7 +137,7 @@ function Athletic(props) {
             `${process.env.REACT_APP_API_BASE}athlete/${athleteId}`
           );
 
-          seAthlete({
+          setAthlete({
             idGame: respAthlete.data.idGame,
             idChampionship: respAthlete.data.idChampionship,
             pictture: respAthlete.data.pictture,
@@ -183,14 +178,14 @@ function Athletic(props) {
 
   const handleChange = (event, slider, name, value) => {
     if (slider === true) {
-      seAthlete({
+      setAthlete({
         ...athlete,
         [name]: value,
       });
       return;
     }
 
-    seAthlete({
+    setAthlete({
       ...athlete,
       [event.target.name]: event.target.value,
     });
@@ -203,7 +198,7 @@ function Athletic(props) {
 
       tempListContact[index][key] = value;
 
-      seAthlete({
+      setAthlete({
         ...athlete,
         contacts: tempListContact,
       });
@@ -217,7 +212,7 @@ function Athletic(props) {
         responsable: "",
       });
 
-      seAthlete({
+      setAthlete({
         ...athlete,
         contacts: tempListContact,
       });
@@ -227,7 +222,7 @@ function Athletic(props) {
 
       tempListContact.splice(index, 1);
 
-      seAthlete({
+      setAthlete({
         ...athlete,
         contacts: tempListContact,
       });
@@ -297,22 +292,30 @@ function Athletic(props) {
   async function saveImage(event, group) {
     event.preventDefault();
 
-    if (loading.photo) {
-      return;
+    if (loading.photo || event.target.files.length === 0) {
+      //return;
     }
-
     setLoading({ ...loading, photo: true });
-    const photo = event.target.value;
+
+    const photo = event.target.files[0];
+    let formData = new FormData();
+    formData.append("image", photo);
+
     console.log(photo);
 
     try {
       const respSaveImage = await api.post(
         `${process.env.REACT_APP_API_BASE}arquivos`,
-        photo
+        { name: photo.name, size: photo.size, key: photo.name }
       );
       setLoading({ ...loading, photo: false });
 
-      console.log(respSaveImage);
+      console.log(respSaveImage.data.url);
+
+      setAthlete({
+        ...athlete,
+        morePhotos: [...athlete.morePhotos, respSaveImage.data.url],
+      });
     } catch (error) {
       setLoading({ ...loading, photo: false });
       console.error("respSaveImage", error);
@@ -583,6 +586,7 @@ function Athletic(props) {
       <form className="disp-flex flex-direct-col">
         {pageAthlete === 2 && (
           <>
+            <Divider className="mg-y-2" />
             <div className="mg-y-2">
               <TextField
                 label="Status da avaliação"
@@ -633,20 +637,20 @@ function Athletic(props) {
                 size="small"
               >
                 <FormControlLabel
+                  label="Baixa"
                   className={classes.MuiTypography}
                   value="Baixa"
                   control={<Radio />}
-                  label="Baixa"
                 />
                 <FormControlLabel
+                  label="Normal"
                   value="Normal"
                   control={<Radio />}
-                  label="Normal"
                 />
                 <FormControlLabel
+                  label="Prioridade"
                   value="Prioridade"
                   control={<Radio />}
-                  label="Prioridade"
                 />
               </RadioGroup>
             </FormControl>
@@ -664,6 +668,7 @@ function Athletic(props) {
         )}
         {pageAthlete === 3 && (
           <>
+            <Divider className="mg-y-2" />
             <div className="disp-flex align-center">
               <Typography variant="subtitle1">Fotos do atleta</Typography>
               <div className="wid-10 mg-x-3">
@@ -788,21 +793,3 @@ function Athletic(props) {
 }
 
 export default Athletic;
-
-/*
-{!athleteId ? (
-  <p>Para inserir fotos, é necessário salvar o cadastro antes</p>
-) : (
-  <>
-    <img alt="picture" src={athletePhotos.principal} />
-    <Inputs
-      label="Foto atleta"
-      type="file"
-      className="disp-block"
-      onChange={(event) => {
-        saveImage(event, "principal");
-      }}
-    />
-  </>
-)}
-*/
