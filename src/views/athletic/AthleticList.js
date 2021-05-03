@@ -1,15 +1,28 @@
 import { React, useEffect, useState } from "react";
-
-import Inputs from "../../components/Inputs";
-import Game from "../../components/Game";
-import api from "../../autenntication/api";
 import { Link, useHistory } from "react-router-dom";
+import api from "../../autenntication/api";
+
+import {
+  TextField,
+  Fab,
+  Button,
+  Backdrop,
+  CircularProgress,
+} from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import ReplyIcon from "@material-ui/icons/Reply";
+
+import Game from "../../components/Game";
+import Navbar from "../../components/Navbar";
+import CardAthlete from "../../components/CardAthlete";
 
 function AthleticList(props) {
   const history = useHistory();
-  const idChampionship = props.match.params.id;
-  const idGame = props.match.params.gameId;
-  const nomeObsevador = JSON.parse(localStorage.getItem("loggedInUser"));
+  const { id, gameId, athleteId } = props.match.params;
+  const [loading, setLoading] = useState({ athlete: false });
+
+  const idChampionship = id;
+
   const [championship, setChampionship] = useState("");
   const [game, setGame] = useState({
     gameName: "",
@@ -21,21 +34,24 @@ function AthleticList(props) {
   const [athleteList, setAthleteList] = useState([]);
 
   useEffect(async () => {
+    setLoading({ ...loading, athlete: true });
+
     try {
       const respChampionship = await api.get(
         `${process.env.REACT_APP_API_BASE}championship/${idChampionship}`
       );
       setChampionship(respChampionship.data.name);
     } catch (error) {
+      setLoading({ ...loading, athlete: false });
       console.error(error);
     }
     try {
       const respGame = await api.get(
-        `${process.env.REACT_APP_API_BASE}game/${idGame}`
+        `${process.env.REACT_APP_API_BASE}game/${gameId}`
       );
       setGame({
         gameName: respGame.data.gameName,
-        dateGame: respGame.data.dateGame.replace("Z", ""),
+        dateGame: respGame.data.dateGame,
         category: respGame.data.category,
         teamA: respGame.data.teamA,
         teamB: respGame.data.teamB,
@@ -43,36 +59,46 @@ function AthleticList(props) {
 
       try {
         const respAthlete = await api.get(
-          `${process.env.REACT_APP_API_BASE}athletes/${idGame}`
+          `${process.env.REACT_APP_API_BASE}athletes/${gameId}`
         );
         setAthleteList(respAthlete.data);
+        setLoading({ ...loading, athlete: false });
       } catch (error) {
+        setLoading({ ...loading, athlete: false });
         console.error(error);
       }
     } catch (error) {
+      setLoading({ ...loading, athlete: false });
       console.error(error);
     }
   }, []);
 
   const handleLikeAthletic = () => {
     history.push(
-      `/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/novo-atleta`
+      `/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/novo-atleta`
     );
   };
 
   return (
-    <div>
-      <Inputs
-        type="year"
-        className="text-30px wid-90 disp-flex just-center mg-b-2"
-        placeholder="Nome do Campeonato "
-        name="name"
+    <div className="full-screen">
+      <Backdrop open={loading.athlete}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Navbar championship={idChampionship} game={gameId} athlete={athleteId} />
+      <TextField
+        label="Nome do Campeonato"
+        type="text"
+        InputProps={{
+          disableUnderline: true,
+          style: {
+            fontSize: "1.5rem",
+            height: "30px",
+          },
+        }}
+        size="medium"
         value={championship}
         disabled="disabled"
       />
-      <div className="disp-flex just-end mg-b-2">
-        <h4>{nomeObsevador.user.name}</h4>
-      </div>
       <Game
         gameName={game.gameName}
         dateGame={game.dateGame}
@@ -80,34 +106,40 @@ function AthleticList(props) {
         teamA={game.teamA}
         teamB={game.teamB}
         disabled={"disabled"}
-        noButton={false}
+        noButton={true}
         handleLikeAthletic={handleLikeAthletic}
       />
       {athleteList.map((athlete, idx) => (
-        <Link
-          className="text-decore-none"
-          to={`/campeonatos/detalhes/${idChampionship}/jogos/${idGame}/${athlete._id}`}
-          key={idx}
-        >
-          <div className="disp-flex just-sp-evenly mg-x-1 game">
-            <div className="disp-flex flex-direct-col align-center">
-              <p>Nome do atleta</p>
-              <p>{athlete.name}</p>
-            </div>
-            <div className="disp-flex flex-direct-col align-center">
-              <p>Número da camisa</p>
-              <p>{athlete.shirtNumber}</p>
-            </div>
-          </div>
-        </Link>
+        <CardAthlete
+          athlete={athlete}
+          idx={idx}
+          championship={idChampionship}
+          athleteId={athlete._id}
+          game={gameId}
+          link={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/${athlete._id}`}
+        />
       ))}
       <Link
         to={`/campeonatos/detalhes/${idChampionship}/jogos`}
-        className="text-decore-none"
+        className="text-decore-none disp-flex just-center"
       >
-        <button className="btn btn-blue mg-y-2 wid-100">
-          Voltar para jogos
-        </button>
+        <Button
+          className=""
+          variant="outlined"
+          color="primary"
+          size="small"
+          startIcon={<ReplyIcon />}
+        >
+          Voltar
+        </Button>
+      </Link>
+      <Link
+        className="wid-40 text-decore-none"
+        to={`/campeonatos/detalhes/${idChampionship}/jogos/${gameId}/novo-atleta`}
+      >
+        <Fab color="primary" aria-label="Adicionar Campeonato" size="small">
+          <AddIcon />
+        </Fab>
       </Link>
     </div>
   );

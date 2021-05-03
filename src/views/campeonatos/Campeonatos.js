@@ -6,10 +6,15 @@ import {
   CircularProgress,
   TextField,
   InputAdornment,
-  IconButton,
+  Typography,
+  Button,
+  Fab,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import AddIcon from "@material-ui/icons/Add";
 
+import Navbar from "../../components/Navbar";
 import CardCampeonato from "../../components/CardCampeonato";
 
 function Campeonatos(props) {
@@ -51,14 +56,17 @@ function Campeonatos(props) {
     });
   };
 
+  const { id, gameId, athleteId } = props.match.params;
+
   return (
     <div className="full-screen campeonato">
-      <h2>Torneios e competições</h2>
-      <section className="disp-flex align-center flex-wrap just-sp-evenly">
+      <Navbar championship={id} game={gameId} athlete={athleteId} />
+      <Typography variant="h5">Torneios e competições</Typography>
+      <section className="mg-y-2 disp-flex align-center flex-wrap just-sp-evenly">
         <TextField
+          label="Pesquisar o campeonato"
           variant="outlined"
           type="search"
-          label="Pesquisar o campeonato"
           size="small"
           InputProps={{
             startAdornment: (
@@ -71,11 +79,16 @@ function Campeonatos(props) {
           value={championships.search}
           onChange={handleSearch}
         />
-        <input type="date" className="date-championships" />
-        <Link to="/campeonatos/novo">
-          <button className="btn btn-black">Novo torneio </button>
-        </Link>
+        <TextField
+          label="Data do campeonato"
+          InputLabelProps={{ shrink: true }}
+          type="date"
+          variant="outlined"
+          size="small"
+          className="wid-50 text-14px"
+        />
       </section>
+
       {loading.championshipList ? (
         <div className="disp-flex just-center ">
           <CircularProgress size={80} />
@@ -91,6 +104,11 @@ function Campeonatos(props) {
           ))}
         </>
       )}
+      <Link className="wid-40 text-decore-none" to="/campeonatos/novo">
+        <Fab color="primary" aria-label="Adicionar Campeonato" size="small">
+          <AddIcon />
+        </Fab>
+      </Link>
     </div>
   );
 }
